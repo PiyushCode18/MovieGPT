@@ -1,0 +1,3 @@
+﻿=== AI_SERVICE PATCH VERIFY ===
+ai_service.dart: class AiStreamChunk {
+CRLF count: 2

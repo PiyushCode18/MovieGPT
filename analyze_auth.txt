@@ -1,0 +1,16 @@
+﻿Analyzing MovieGPT...                                           
+
+   info - Unnecessary use of multiple underscores. Try using '_' - lib\screens\profile_screen.dart:223:29 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores. Try using '_' - lib\screens\profile_screen.dart:223:33 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores. Try using '_' - lib\screens\splash_screen.dart:66:28 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores. Try using '_' - lib\screens\splash_screen.dart:66:32 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores. Try using '_' - lib\screens\splash_screen.dart:67:41 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores. Try using '_' - lib\screens\splash_screen.dart:86:20 - unnecessary_underscores
+
+flutter : 6 issues found. (ran in 5.4s)
+At line:1 char:45
++ ... "c:/FLUTTER/FLUTTER PROJECTS/MovieGPT" ; flutter analyze 2>&1 | Out-F ...
++                                              ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (6 issues found. (ran in 5.4s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

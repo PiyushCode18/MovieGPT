@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MovieGPT native launch window (API 21+). Uses a fixed dark background
+     (never ?android:colorBackground, which can flash white) with the circular
+     emblem centered. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <solid android:color="#0D0D0D" />
+        </shape>
+    </item>
+    <item
+        android:drawable="@drawable/splash_logo"
+        android:gravity="center" />
+</layer-list>

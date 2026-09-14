@@ -1,0 +1,8 @@
+{
+  "gemini": {
+    "key": "YOUR_GEMINI_API_KEY_HERE"
+  },
+  "openai": {
+    "key": "YOUR_OPENAI_API_KEY_HERE"
+  }
+}

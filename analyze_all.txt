@@ -1,0 +1,15 @@
+﻿Analyzing MovieGPT...                                           
+
+  error - Missing concrete implementation of 'AiClient.streamComplete'. Try implementing the missing method, or make the class abstract - test\ai_chat_system_test.dart:13:7 - non_abstract_class_inherits_abstract_member
+
+flutter : 1 issue found. (ran in 7.5s)
+At line:1 char:44
++ ...  "c:\FLUTTER\FLUTTER PROJECTS\MovieGPT"; 
+flutter analyze 2>&1 | Selec ...
++                                              
+~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (1 i 
+   ssue found. (ran in 7.5s):String) [], Remote  
+  Exception
+    + FullyQualifiedErrorId : NativeCommandError
+ 

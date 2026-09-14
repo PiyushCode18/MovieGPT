@@ -1,0 +1,5 @@
+﻿00:00 +0: loading C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart
+00:00 +0: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:01 +1: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/widget_test.dart: MovieGPT app smoke test
+00:01 +2: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/widget_test.dart: MovieGPT app smoke test
+00:02 +3: All tests passed!

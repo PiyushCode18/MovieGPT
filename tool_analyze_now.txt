@@ -1,0 +1,13 @@
+﻿Analyzing MovieGPT...                                           
+
+warning - The asset file 'assets/images/moviegpt_logo.png' doesn't exist. Try creating the file or fixing the path to the file - pubspec.yaml:37:7 - asset_does_not_exist
+warning - The asset file 'assets/images/moviegpt_logo_transparent.png' doesn't exist. Try creating the file or fixing the path to the file - pubspec.yaml:38:7 - asset_does_not_exist
+
+flutter : 2 issues found. (ran in 15.9s)
+At line:1 char:44
++ ...  'c:\FLUTTER\FLUTTER PROJECTS\MovieGPT'; flutter analyze 2>&1 | Out-F ...
++                                              ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpe    cified: (2 issues found. (ran in     15.9s):String) [], RemoteExcept    ion
+    + FullyQualifiedErrorId : Native    CommandError
+ 
+ANALYZE_DONE

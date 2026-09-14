@@ -1,0 +1,3 @@
+﻿00:00 +0: loading C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/widget_test.dart
+00:00 +0: MovieGPT app smoke test
+00:01 +1: All tests passed!

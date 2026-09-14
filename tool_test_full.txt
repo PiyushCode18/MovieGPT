@@ -1,0 +1,32 @@
+﻿00:00 +0: loading C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/ai_recommendation_test.dart
+00:00 +0: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/ai_recommendation_test.dart: AiRecommendationService intent helpers detectGenreQuery maps mood keywords to search queries
+00:00 +1: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/ai_recommendation_test.dart: AiRecommendationService intent helpers detectGenreQuery returns null for non-genre prompts
+00:00 +2: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/ai_recommendation_test.dart: AiRecommendationService intent helpers containsAny matches any of the provided words
+00:00 +3: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/ai_recommendation_test.dart: AiRecommendationService intent helpers extractTitleAfter pulls the title following a prefix
+00:00 +4: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/ai_recommendation_test.dart: AiRecommendationService public API recommend returns empty for blank text
+00:00 +5: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/ai_recommendation_test.dart: AiRecommendationService public API resetContext clears the recommendation tracker
+00:00 +6: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/ai_recommendation_test.dart: AiRecommendationService public API exception toString exposes a friendly message
+00:00 +7: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/chat_history_test.dart: ChatMessage serialization toJson round-trips a text message
+00:00 +8: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/chat_history_test.dart: ChatMessage serialization toJson round-trips a message with recommended movies
+00:00 +9: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/chat_history_test.dart: ChatMessage serialization fromJson handles malformed input gracefully
+00:00 +10: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/chat_history_test.dart: ChatHistoryNotifier persists and restores history across instances
+00:00 +11: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/chat_history_test.dart: ChatHistoryNotifier bounds history to maxMessages
+00:01 +12: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/chat_history_test.dart: ChatHistoryNotifier clear wipes persisted history
+00:01 +13: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/chat_history_test.dart: ChatHistoryNotifier recovers from corrupted persisted data
+00:01 +14: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/chat_history_test.dart: ChatHistoryNotifier rejects messages that decode to invalid entries
+00:01 +15: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +16: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +17: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +18: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +19: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +20: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +21: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +22: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +23: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +24: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +25: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +26: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +27: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:03 +28: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in bounded grid cell without overflow
+00:03 +29: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/widget_test.dart: MovieGPT app smoke test
+00:04 +30: All tests passed!

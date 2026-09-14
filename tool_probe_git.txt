@@ -1,0 +1,7 @@
+﻿git : fatal: not a git repository (or any of the parent directories): .git
+At line:1 char:119
++ ... ncoding utf8 tool_probe_flutter.txt ; git status --short 2>&1 | Out-F ...
++                                           ~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: not a gi...ectories): .git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

@@ -1,0 +1,3 @@
+﻿C:\FLUTTER\SRC\flutter_windows_3.32.7-stable\flutter\bin\flutter.bat
+ANDROID_HOME=
+Sdk

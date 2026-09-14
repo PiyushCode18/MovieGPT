@@ -1,0 +1,17 @@
+{
+  "name": "moviegpt-functions",
+  "description": "Secure backend proxy for MovieGPT AI chat — injects AI API keys server-side so they are never exposed in the Flutter Web client.",
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "index.js",
+    "private": true,
+  "dependencies": {
+    "firebase-admin": "^12.0.1",
+    "firebase-functions": "^4.6.0"
+  },
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "deploy": "firebase deploy --only functions"
+  }
+}

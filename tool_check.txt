@@ -1,0 +1,23 @@
+﻿=== PIDOF ===
+3786
+=== CURRENT FOCUS ===
+
+  mCurrentFocus=Window{b95edb1 u0 com.piyushcode.moviegpt/com.piyushcode.moviegpt.MainActivity}
+  mFocusedApp=ActivityRecord{c7f33ac u0 com.piyushcode.moviegpt/.MainActivity t7}
+
+
+=== BOUNDED LOGCAT (errors) ===
+=== BOUNDED LOGCAT (last 12) ===
+08-11 13:07:17.394   599   745 W IPCThreadState: Sending oneway calls to frozen process.
+08-11 13:07:17.394   599   745 W IPCThreadState: Sending oneway calls to frozen process.
+08-11 13:07:17.394   599   745 W IPCThreadState: Sending oneway calls to frozen process.
+08-11 13:07:17.395   599   745 W IPCThreadState: Sending oneway calls to frozen process.
+08-11 13:07:17.395   599   745 W IPCThreadState: Sending oneway calls to frozen process.
+08-11 13:07:17.398   599   745 D ConnectivityService: NetReassign [no changes] [c 0] [a 2] [i 1]
+08-11 13:07:17.399  1071  1396 I NearbyMediums: Wifi changed new SSID: "AndroidWifi"
+08-11 13:07:17.399  1071  1396 I NearbyMediums: WifiLanConnectivityInfo is not changed, skip notify.
+08-11 13:07:17.402  1452  2176 I BugleRcsEngine: No RCS Configuration was found in Bugle for simID: redacted-pii:sim_id[chars:20,last3:897] [CONTEXT log_prefix="ProvisioningEngineDataRetriever" thread_id=61 ]
+08-11 13:07:17.897  1071  1396 I NearbySharing: Network state changed: NetworkState(isRestricted=false, isOnline=true, isCongested=false, isMetered=false, isWifiConnected=true)
+08-11 13:07:23.431   599   635 D OomAdjuster: Not killing cached processes
+08-11 13:07:29.233   599  1659 D OomAdjuster: Not killing cached processes
+CHECK_DONE

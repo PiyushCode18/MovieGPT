@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Android 12+ (API 31+) splash screen.
+
+      The system renders this immediately (before Flutter starts) using the
+      dark cinematic background (#0D0D0D) plus the centered MovieGPT emblem.
+      This bridges seamlessly into the Flutter cinematic splash (same dark
+      background, same emblem), giving one continuous startup sequence with no
+      white/black flash and no double-splash.
+    -->
+    <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
+        <item name="android:windowBackground">@drawable/launch_background</item>
+        <item name="android:windowSplashScreenBackground">#0D0D0D</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">#0D0D0D</item>
+    </style>
+</resources>

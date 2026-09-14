@@ -1,0 +1,5 @@
+﻿=== screencap to sdcard ===
+=== pull ===
+png_bytes=147933
+png_sig=89 50 4e 47 0d 0a 1a 0a
+PNG_DONE

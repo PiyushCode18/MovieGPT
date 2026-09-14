@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      MovieGPT adaptive icon background color.
+      Deep purple-black, matching the premium dark theme. The foreground
+      layer draws the circular cinematic design on top of this.
+    -->
+    <color name="ic_launcher_background">#0D0D0D</color>
+</resources>

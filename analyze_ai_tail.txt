@@ -1,0 +1,14 @@
+﻿Analyzing ai_service.dart...                                    
+
+warning - The declaration 'handleData' isn't referenced. Try removing the declaration of 'handleData' - lib\services\ai_service.dart:503:20 - unused_element
+
+flutter : 1 issue found. (ran in 3.0s)
+At line:1 char:44
++ ... \MovieGPT"; flutter analyze 
+lib\services\ai_service.dart 2>&1 | Selec ...
++                 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (1 issue fo 
+   und. (ran in 3.0s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

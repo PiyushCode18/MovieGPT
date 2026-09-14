@@ -1,0 +1,25 @@
+﻿=== generated logo assets ===
+
+Name                             KB
+----                             --
+moviegpt_logo.png               505
+moviegpt_logo_foreground.png  278.5
+moviegpt_logo_transparent.png   505
+
+
+=== launcher icon res (regenerated) ===
+
+Name                         KB
+----                         --
+ic_launcher.png             9.5
+ic_launcher_foreground.png 17.3
+ic_launcher.png             5.1
+ic_launcher_foreground.png  9.5
+ic_launcher.png              14
+ic_launcher_foreground.png 26.2
+ic_launcher.png            26.7
+ic_launcher_foreground.png 47.5
+ic_launcher.png            39.8
+ic_launcher_foreground.png   73
+
+

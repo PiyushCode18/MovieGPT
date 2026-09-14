@@ -1,0 +1,6 @@
+﻿List of devices attached
+emulator-5554	device
+
+Performing Streamed Install
+Success
+INSTALL_DONE_EXIT=0

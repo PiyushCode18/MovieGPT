@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  MovieGPT native splash emblem (used by the Android 12+ splash and by the
+  pre-v31 launch window). A simplified circular version of the in-app emblem:
+  dark disc, metallic ring, metallic "M", red interior valley and a white
+  play button. Matches the Flutter painter for a seamless startup transition.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Dark cinematic disc (opaque, transparent corners). -->
+    <path
+        android:fillColor="#181119"
+        android:pathData="M54,54m-50,0a50,50 0,1 1,100 0a50,50 0,1 1,-100 0" />
+
+    <!-- Metallic outer ring. -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M54,54m-47,0a47,47 0,1 1,94 0a47,47 0,1 1,-94 0"
+        android:strokeColor="#9A9CA4"
+        android:strokeWidth="3"
+        android:strokeLineCap="round" />
+
+    <!-- Red accent ring. -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M54,54m-37,0a37,37 0,1 1,74 0a37,37 0,1 1,-74 0"
+        android:strokeColor="#E50914"
+        android:strokeWidth="2"
+        android:strokeLineCap="round" />
+
+    <!-- Metallic "M". -->
+    <path
+        android:fillColor="#D9DAE0"
+        android:pathData="M25,70 L25,36 L42,52 L54,38 L66,52 L83,36 L83,70 Z"
+        android:strokeColor="#6E7078"
+        android:strokeWidth="1.5" />
+
+    <!-- Red interior valley of the "M". -->
+    <path
+        android:fillColor="#E50914"
+        android:pathData="M42,52 L54,38 L66,52 L66,70 L42,70 Z" />
+
+    <!-- White play button. -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M46,54 L46,68 L59,61 Z" />
+</vector>

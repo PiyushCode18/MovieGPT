@@ -1,0 +1,10 @@
+﻿=== LAUNCH ===
+Starting: Intent { cmp=com.piyushcode.moviegpt/.MainActivity }
+=== SPLASH SCREENSHOT at 5s ===
+splash_png_bytes=118
+=== HOME SCREENSHOT at 11s ===
+home_png_bytes=118
+=== PIDOF ===
+3786
+=== LOGCAT tail ===
+RUN_DONE=0

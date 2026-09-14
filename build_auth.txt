@@ -1,0 +1,19 @@
+﻿Running Gradle task 'assembleDebug'...                          
+Checking the license for package Android SDK Platform 34 in C:\Users\asus\AppData\Local\Android\Sdk\licenses
+License for package Android SDK Platform 34 accepted.
+Preparing "Install Android SDK Platform 34 (revision 3)".
+"Install Android SDK Platform 34 (revision 3)" ready.
+Installing Android SDK Platform 34 in C:\Users\asus\AppData\Local\Android\Sdk\platforms\android-34
+"Install Android SDK Platform 34 (revision 3)" complete.
+"Install Android SDK Platform 34 (revision 3)" finished.
+flutter : Note: Some input files use or override a deprecated API.
+At line:1 char:45
++ ... R/FLUTTER PROJECTS/MovieGPT" ; flutter build apk --debug 2>&1 | Out-F ...
++                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Note: Some inpu...deprecated API.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Note: Recompile with -Xlint:deprecation for details.
+[=========                              ] 25%                                   
+Running Gradle task 'assembleDebug'...                            228.4s
+ΓêÜ Built build\app\outputs\flutter-apk\app-debug.apk

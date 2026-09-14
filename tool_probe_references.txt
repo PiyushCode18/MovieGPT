@@ -1,0 +1,10 @@
+﻿
+Path                                                                 LineNumber Line                                                            
+----                                                                 ---------- ----                                                            
+C:\FLUTTER\FLUTTER PROJECTS\MovieGPT\lib\screens\profile_screen.dart        170                     icon: Icons.logout_rounded,                 
+C:\FLUTTER\FLUTTER PROJECTS\MovieGPT\lib\screens\profile_screen.dart        171                     label: 'Logout',                            
+C:\FLUTTER\FLUTTER PROJECTS\MovieGPT\lib\screens\splash_screen.dart          22     // Show the selected MovieGPT logo briefly,                 
+C:\FLUTTER\FLUTTER PROJECTS\MovieGPT\lib\screens\splash_screen.dart          51           image: AssetImage('assets/images/moviegpt_logo.png'), 
+C:\FLUTTER\FLUTTER PROJECTS\MovieGPT\lib\screens\trailer_screen.dart         30 ///  - The small YouTube "logo" watermark link is owned by Yo...
+
+

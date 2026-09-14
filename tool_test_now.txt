@@ -1,0 +1,11 @@
+﻿Error detected in pubspec.yaml:
+flutter : No file or variants found for asset: assets/images/moviegpt_logo.png.
+At line:1 char:44
++ cd 'c:\FLUTTER\FLUTTER PROJECTS\MovieGPT'; flutter test 2>&1 | Out-Fi ...
++                                            ~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpe    cified: (No file or vari...iegpt    _logo.png.:String) [], RemoteExc    eption
+    + FullyQualifiedErrorId : Native    CommandError
+ 
+
+Error: Failed to build asset bundle
+TEST_DONE

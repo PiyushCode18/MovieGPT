@@ -1,0 +1,11 @@
+﻿00:00 +0: loading C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/tool/generate_logo_assets.dart
+00:00 +0: render MovieGPT logo PNG assets
+Generated assets/images/moviegpt_logo.png (517089 bytes)
+Generated assets/images/moviegpt_logo_transparent.png (517089 bytes)
+Generated assets/images/moviegpt_logo_foreground.png (285149 bytes)
+Generated android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png (9776 bytes)
+Generated android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png (17757 bytes)
+Generated android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png (26808 bytes)
+Generated android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png (48609 bytes)
+Generated android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png (74748 bytes)
+00:01 +1: All tests passed!

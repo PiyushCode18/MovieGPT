@@ -1,0 +1,153 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+/// Central configuration for environment variables and API keys.
+///
+/// Keys are resolved from (in order of priority):
+/// 1. `--dart-define=KEY=...` at build time (most secure).
+/// 2. `.env` file bundled with the app (dev convenience).
+///
+/// **Security:** key *values* are never printed to logs — only presence
+/// warnings in debug builds.
+class EnvConfig {
+  EnvConfig._();
+
+  // Compile-time dart-define keys — MUST be static const (Dart rule).
+  // Never call String.fromEnvironment() inside a function body; it can only
+  // be used as a const constructor evaluated at compile time.
+  static const String _tmdbKey       = String.fromEnvironment('TMDB_API_KEY');
+  static const String _geminiKey     = String.fromEnvironment('GEMINI_API_KEY');
+  static const String _openAiKey     = String.fromEnvironment('OPENAI_API_KEY');
+  static const String _aiBackendUrl  = String.fromEnvironment('AI_BACKEND_URL');
+  static const String _geminiModel   = String.fromEnvironment('GEMINI_MODEL');
+  static const String _openAiBaseUrl = String.fromEnvironment('OPENAI_BASE_URL');
+  static const String _openAiModel   = String.fromEnvironment('OPENAI_MODEL');
+  static const String _aiProvider    = String.fromEnvironment('AI_PROVIDER');
+
+  /// Strips whitespace / surrounding quotes so a stray character in `.env`
+  /// cannot silently break requests.
+  static String _clean(String raw) =>
+      raw.trim().replaceAll('"', '').replaceAll("'", '');
+
+  /// Reads [name] from dart-define first, then from the `.env` asset.
+  ///
+  /// Falls back to an empty value when dotenv has not been loaded (e.g. in
+  /// unit tests) instead of throwing NotInitializedError.
+  static String _resolve(String dartDefine, String name) {
+    final define = _clean(dartDefine);
+    if (define.isNotEmpty) return define;
+    String fromEnv = '';
+    try {
+      fromEnv = dotenv.maybeGet(name) ?? '';
+    } catch (_) {
+      fromEnv = '';
+    }
+    return _clean(fromEnv);
+  }
+
+    // ---------------------------------------------------------------------------
+  // TMDB
+  // ---------------------------------------------------------------------------
+
+  /// The TMDB API Read Access Token (movie data).
+  static String get tmdbApiKey => _resolve(_tmdbKey, 'TMDB_API_KEY');
+
+  static bool get hasApiKey => tmdbApiKey.isNotEmpty;
+
+  // ---------------------------------------------------------------------------
+  // AI CHAT (real LLM backend)
+  // ---------------------------------------------------------------------------
+
+  /// URL of the secure backend proxy (Firebase Cloud Function) that injects
+  /// the AI API key server-side.  Set this when you want to avoid exposing
+  /// the AI key in the Flutter Web client.
+  ///
+  /// When non-empty, the app sends AI requests to this URL instead of calling
+  /// Gemini / OpenAI directly.
+  static String get aiBackendUrl =>
+      _resolve(_aiBackendUrl, 'AI_BACKEND_URL');
+
+  /// Whether the Flutter app should route AI requests through the backend
+  /// proxy instead of calling the AI API directly.
+  ///
+  /// Recommended for Flutter Web.  When enabled the API key lives only on
+  /// the server — it is never bundled in the app or visible in the browser's
+  /// Network tab.
+  static bool get useAiBackend => aiBackendUrl.isNotEmpty;
+
+  /// Google Gemini API key (https://aistudio.google.com/apikey).
+  /// Free tier is sufficient for the AI chat.
+  ///
+  /// **Note:** when [useAiBackend] is true this value is not needed on the
+  /// client — the backend holds the key.  It is still read for direct
+  /// (mobile) connections when no backend is configured.
+  static String get geminiApiKey => _resolve(_geminiKey, 'GEMINI_API_KEY');
+
+  /// Gemini model to use (default: `gemini-2.5-flash`).
+  ///
+  /// NOTE: The model can always be overridden via GEMINI_MODEL in `.env`.
+  static String get geminiModel {
+    final m = _resolve(_geminiModel, 'GEMINI_MODEL');
+    return m.isEmpty ? 'gemini-2.5-flash' : m;
+  }
+
+  /// API key for any OpenAI-compatible endpoint (OpenAI, Groq, OpenRouter,
+  /// LM Studio, Ollama's OpenAI shim, etc.).
+  static String get openAiApiKey => _resolve(_openAiKey, 'OPENAI_API_KEY');
+
+  /// Base URL of the OpenAI-compatible endpoint (no trailing slash).
+  static String get openAiBaseUrl {
+    final raw = _resolve(_openAiBaseUrl, 'OPENAI_BASE_URL');
+    final cleaned = _clean(raw);
+    if (cleaned.isEmpty) return 'https://api.openai.com/v1';
+    return cleaned.endsWith('/') ? cleaned.substring(0, cleaned.length - 1) : cleaned;
+  }
+
+  /// OpenAI-compatible chat model (default: `gpt-4o-mini`).
+  static String get openAiModel {
+    final value = _resolve(_openAiModel, 'OPENAI_MODEL');
+    return value.isEmpty ? 'gpt-4o-mini' : value;
+  }
+
+  /// Provider preference from `.env`: `auto` (default) | `gemini` | `openai`.
+  static String get aiProvider {
+    final value = _resolve(_aiProvider, 'AI_PROVIDER').toLowerCase();
+    return value.isEmpty ? 'auto' : value;
+  }
+
+  /// Whether a real LLM backend has been configured for the AI chat.
+  ///
+  /// Truth table (in priority order):
+  /// 1. `AI_BACKEND_URL` set → true (backend proxy is configured).
+  /// 2. `AI_PROVIDER=gemini` → true only if `GEMINI_API_KEY` is non-empty.
+  /// 3. `AI_PROVIDER=openai` → true only if `OPENAI_API_KEY` is non-empty.
+  /// 4. `AI_PROVIDER=auto` → true if either key is non-empty.
+  ///
+  /// **Security note for Flutter Web:** direct API keys are visible in the
+  /// browser, so always prefer [useAiBackend] for web builds.
+  static bool get hasAiConfig {
+    if (useAiBackend) return true;
+    switch (aiProvider) {
+      case 'gemini':
+        return geminiApiKey.isNotEmpty;
+      case 'openai':
+        return openAiApiKey.isNotEmpty;
+      default:
+        return geminiApiKey.isNotEmpty || openAiApiKey.isNotEmpty;
+    }
+  }
+
+  /// Debug-only hint when the AI backend is missing. Never prints key values.
+  static void debugWarnIfAiMissing() {
+    if (kDebugMode && !hasAiConfig) {
+      debugPrint(
+        '[MovieGPT] AI chat is not configured. Either:\n'
+        '  1. Set AI_BACKEND_URL to your Firebase Function proxy URL, OR\n'
+        '  2. Add GEMINI_API_KEY (https://aistudio.google.com/apikey) or '
+        'OPENAI_API_KEY to .env and restart the app.\n'
+        'See functions/README.md for backend setup instructions.',
+      );
+    }
+  }
+}
+

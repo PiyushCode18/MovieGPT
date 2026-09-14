@@ -1,0 +1,84 @@
+﻿Analyzing MovieGPT...                                           
+
+   info - The imported package 'movie_gpt_app_new' isn't a dependency of the importing package. Try adding a dependency for 'movie_gpt_app_new' in the 'pubspec.yaml' file - test\ai_recommendation_test.dart:2:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:movie_gpt_app_new/services/ai_recommendation_service.dart'. Try creating the file referenced by the URI, or try using a URI for a file that does exist - test\ai_recommendation_test.dart:2:8 - uri_does_not_exist
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:10:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:14:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:18:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:22:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:26:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:30:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:34:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:38:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:45:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:48:14 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:53:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:60:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:70:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:77:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:84:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:91:9 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:103:28 - undefined_identifier
+  error - Undefined name 'AiRecommendationService'. Try correcting the name to one that is defined, or defining the name - test\ai_recommendation_test.dart:108:23 - undefined_identifier
+  error - Const variables must be initialized with a constant value. Try changing the initializer to be a constant expression - test\ai_recommendation_test.dart:115:17 - const_initialized_with_non_constant_value
+  error - The function 'AiRecommendationException' isn't defined. Try importing the library that defines 'AiRecommendationException', correcting the name to the name of an existing function, or defining a function named 'AiRecommendationException' - test\ai_recommendation_test.dart:115:17 - undefined_function
+   info - The imported package 'movie_gpt_app_new' isn't a dependency of the importing package. Try adding a dependency for 'movie_gpt_app_new' in the 'pubspec.yaml' file - test\chat_history_test.dart:4:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:movie_gpt_app_new/models/movie_model.dart'. Try creating the file referenced by the URI, or try using a URI for a file that does exist - test\chat_history_test.dart:4:8 - uri_does_not_exist
+   info - The imported package 'movie_gpt_app_new' isn't a dependency of the importing package. Try adding a dependency for 'movie_gpt_app_new' in the 'pubspec.yaml' file - test\chat_history_test.dart:5:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:movie_gpt_app_new/state/providers.dart'. Try creating the file referenced by the URI, or try using a URI for a file that does exist - test\chat_history_test.dart:5:8 - uri_does_not_exist
+  error - The function 'ChatMessage' isn't defined. Try importing the library that defines 'ChatMessage', correcting the name to the name of an existing function, or defining a function named 'ChatMessage' - test\chat_history_test.dart:13:19 - undefined_function
+  error - Undefined name 'ChatMessage'. Try correcting the name to one that is defined, or defining the name - test\chat_history_test.dart:20:24 - undefined_identifier
+  error - The function 'Movie' isn't defined. Try importing the library that defines 'Movie', correcting the name to the name of an existing function, or defining a function named 'Movie' - test\chat_history_test.dart:29:21 - undefined_function
+  error - The function 'ChatMessage' isn't defined. Try importing the library that defines 'ChatMessage', correcting the name to the name of an existing function, or defining a function named 'ChatMessage' - test\chat_history_test.dart:37:19 - undefined_function
+  error - Undefined name 'ChatMessage'. Try correcting the name to one that is defined, or defining the name - test\chat_history_test.dart:44:24 - undefined_identifier
+  error - Undefined name 'ChatMessage'. Try correcting the name to one that is defined, or defining the name - test\chat_history_test.dart:54:19 - undefined_identifier
+  error - Undefined name 'ChatMessage'. Try correcting the name to one that is defined, or defining the name - test\chat_history_test.dart:58:21 - undefined_identifier
+  error - Undefined name 'ChatMessage'. Try correcting the name to one that is defined, or defining the name - test\chat_history_test.dart:68:19 - undefined_identifier
+  error - The function 'ChatHistoryNotifier' isn't defined. Try importing the library that defines 'ChatHistoryNotifier', correcting the name to the name of an existing function, or defining a function named 'ChatHistoryNotifier' - test\chat_history_test.dart:90:24 - undefined_function
+  error - The function 'ChatMessage' isn't defined. Try importing the library that defines 'ChatMessage', correcting the name to the name of an existing function, or defining a function named 'ChatMessage' - test\chat_history_test.dart:95:9 - undefined_function
+  error - The function 'ChatMessage' isn't defined. Try importing the library that defines 'ChatMessage', correcting the name to the name of an existing function, or defining a function named 'ChatMessage' - test\chat_history_test.dart:103:9 - undefined_function
+  error - The function 'ChatHistoryNotifier' isn't defined. Try importing the library that defines 'ChatHistoryNotifier', correcting the name to the name of an existing function, or defining a function named 'ChatHistoryNotifier' - test\chat_history_test.dart:115:24 - undefined_function
+  error - The function 'ChatHistoryNotifier' isn't defined. Try importing the library that defines 'ChatHistoryNotifier', correcting the name to the name of an existing function, or defining a function named 'ChatHistoryNotifier' - test\chat_history_test.dart:123:24 - undefined_function
+  error - Undefined name 'ChatHistoryNotifier'. Try correcting the name to one that is defined, or defining the name - test\chat_history_test.dart:125:27 - undefined_identifier
+  error - The function 'ChatMessage' isn't defined. Try importing the library that defines 'ChatMessage', correcting the name to the name of an existing function, or defining a function named 'ChatMessage' - test\chat_history_test.dart:127:11 - undefined_function
+  error - Undefined name 'ChatHistoryNotifier'. Try correcting the name to one that is defined, or defining the name - test\chat_history_test.dart:137:9 - undefined_identifier
+  error - The function 'ChatHistoryNotifier' isn't defined. Try importing the library that defines 'ChatHistoryNotifier', correcting the name to the name of an existing function, or defining a function named 'ChatHistoryNotifier' - test\chat_history_test.dart:144:24 - undefined_function
+  error - The function 'ChatMessage' isn't defined. Try importing the library that defines 'ChatMessage', correcting the name to the name of an existing function, or defining a function named 'ChatMessage' - test\chat_history_test.dart:147:9 - undefined_function
+  error - The function 'ChatHistoryNotifier' isn't defined. Try importing the library that defines 'ChatHistoryNotifier', correcting the name to the name of an existing function, or defining a function named 'ChatHistoryNotifier' - test\chat_history_test.dart:158:24 - undefined_function
+  error - The function 'ChatHistoryNotifier' isn't defined. Try importing the library that defines 'ChatHistoryNotifier', correcting the name to the name of an existing function, or defining a function named 'ChatHistoryNotifier' - test\chat_history_test.dart:167:24 - undefined_function
+  error - The function 'ChatHistoryNotifier' isn't defined. Try importing the library that defines 'ChatHistoryNotifier', correcting the name to the name of an existing function, or defining a function named 'ChatHistoryNotifier' - test\chat_history_test.dart:185:24 - undefined_function
+   info - The imported package 'movie_gpt_app_new' isn't a dependency of the importing package. Try adding a dependency for 'movie_gpt_app_new' in the 'pubspec.yaml' file - test\movie_card_layout_test.dart:4:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:movie_gpt_app_new/models/movie_model.dart'. Try creating the file referenced by the URI, or try using a URI for a file that does exist - test\movie_card_layout_test.dart:4:8 - uri_does_not_exist
+   info - The imported package 'movie_gpt_app_new' isn't a dependency of the importing package. Try adding a dependency for 'movie_gpt_app_new' in the 'pubspec.yaml' file - test\movie_card_layout_test.dart:5:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:movie_gpt_app_new/widgets/movie_card.dart'. Try creating the file referenced by the URI, or try using a URI for a file that does exist - test\movie_card_layout_test.dart:5:8 - uri_does_not_exist
+  error - The function 'Movie' isn't defined. Try importing the library that defines 'Movie', correcting the name to the name of an existing function, or defining a function named 'Movie' - test\movie_card_layout_test.dart:8:17 - undefined_function
+  error - The function 'MovieCard' isn't defined. Try importing the library that defines 'MovieCard', correcting the name to the name of an existing function, or defining a function named 'MovieCard' - test\movie_card_layout_test.dart:31:38 - undefined_function
+  error - The function 'MovieCard' isn't defined. Try importing the library that defines 'MovieCard', correcting the name to the name of an existing function, or defining a function named 'MovieCard' - test\movie_card_layout_test.dart:57:19 - undefined_function
+   info - The imported package 'movie_gpt_app_new' isn't a dependency of the importing package. Try adding a dependency for 'movie_gpt_app_new' in the 'pubspec.yaml' file - test\movie_repository_test.dart:2:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:movie_gpt_app_new/data/movie_repository.dart'. Try creating the file referenced by the URI, or try using a URI for a file that does exist - test\movie_repository_test.dart:2:8 - uri_does_not_exist
+   info - The imported package 'movie_gpt_app_new' isn't a dependency of the importing package. Try adding a dependency for 'movie_gpt_app_new' in the 'pubspec.yaml' file - test\movie_repository_test.dart:3:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:movie_gpt_app_new/models/movie_model.dart'. Try creating the file referenced by the URI, or try using a URI for a file that does exist - test\movie_repository_test.dart:3:8 - uri_does_not_exist
+  error - Undefined name 'MovieRepository'. Try correcting the name to one that is defined, or defining the name - test\movie_repository_test.dart:11:5 - undefined_identifier
+  error - Undefined name 'MovieRepository'. Try correcting the name to one that is defined, or defining the name - test\movie_repository_test.dart:17:7 - undefined_identifier
+  error - Undefined name 'MovieRepository'. Try correcting the name to one that is defined, or defining the name - test\movie_repository_test.dart:18:7 - undefined_identifier
+  error - Undefined name 'MovieRepository'. Try correcting the name to one that is defined, or defining the name - test\movie_repository_test.dart:22:28 - undefined_identifier
+  error - The function 'Movie' isn't defined. Try importing the library that defines 'Movie', correcting the name to the name of an existing function, or defining a function named 'Movie' - test\movie_repository_test.dart:29:21 - undefined_function
+  error - Undefined name 'Movie'. Try correcting the name to one that is defined, or defining the name - test\movie_repository_test.dart:41:24 - undefined_identifier
+  error - Undefined name 'Movie'. Try correcting the name to one that is defined, or defining the name - test\movie_repository_test.dart:55:24 - undefined_identifier
+  error - Undefined name 'Movie'. Try correcting the name to one that is defined, or defining the name - test\movie_repository_test.dart:63:24 - undefined_identifier
+  error - Undefined name 'Movie'. Try correcting the name to one that is defined, or defining the name - test\movie_repository_test.dart:76:21 - undefined_identifier
+  error - Undefined name 'Movie'. Try correcting the name to one that is defined, or defining the name - test\movie_repository_test.dart:105:21 - undefined_identifier
+  error - The function 'Movie' isn't defined. Try importing the library that defines 'Movie', correcting the name to the name of an existing function, or defining a function named 'Movie' - test\movie_repository_test.dart:110:21 - undefined_function
+  error - The function 'Movie' isn't defined. Try importing the library that defines 'Movie', correcting the name to the name of an existing function, or defining a function named 'Movie' - test\movie_repository_test.dart:120:21 - undefined_function
+  error - Undefined name 'Trailer'. Try correcting the name to one that is defined, or defining the name - test\movie_repository_test.dart:129:23 - undefined_identifier
+  error - Undefined name 'Trailer'. Try correcting the name to one that is defined, or defining the name - test\movie_repository_test.dart:149:22 - undefined_identifier
+  error - Undefined name 'Trailer'. Try correcting the name to one that is defined, or defining the name - test\movie_repository_test.dart:154:23 - undefined_identifier
+   info - Can't use a relative path to import a library in 'lib'. Try fixing the relative path or changing the import to a 'package:' import - tool\generate_logo_assets.dart:22:8 - avoid_relative_lib_imports
+
+flutter : 74 issues found. (ran in 11.8s)
+At line:1 char:44
++ ...  'c:\FLUTTER\FLUTTER PROJECTS\MovieGPT'; flutter analyze 2>&1 | Out-F ...
++                                              ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (74 issues found. (ran in 11.8s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

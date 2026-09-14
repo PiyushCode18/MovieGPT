@@ -1,0 +1,32 @@
+﻿00:03 +27: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:04 +28: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in bounded grid cell without overflow
+00:12 +29: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/widget_test.dart: MovieGPT app smoke test
+ΓòÉΓòÉΓòí EXCEPTION CAUGHT BY WIDGETS LIBRARY Γò₧ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+The following assertion was thrown building Builder:
+dependOnInheritedWidgetOfExactType<MediaQuery>() or dependOnInheritedElement() was called before
+_SplashScreenState.initState() completed.
+When an inherited widget changes, for example if the value of Theme.of() changes, its dependent
+widgets are rebuilt. If the dependent widget's reference to the inherited widget is in a constructor
+or an initState() method, then the rebuilt dependent widget will not reflect the changes in the
+inherited widget.
+Typically references to inherited widgets should occur in widget build() methods. Alternatively,
+initialization based on inherited widgets can be placed in the didChangeDependencies method, which
+is called after initState and whenever the dependencies change thereafter.
+
+The relevant error-causing widget was:
+  MaterialApp MaterialApp:file:///C:/FLUTTER/FLUTTER%20PROJECTS/MovieGPT/lib/main.dart:155:12
+
+When the exception was thrown, this was the stack:
+#0      StatefulElement.dependOnInheritedElement.<anonymous closure> (package:flutter/src/widgets/framework.dart:6054:9)
+#1      StatefulElement.dependOnInheritedElement (package:flutter/src/widgets/framework.dart:6101:6)
+#2      Element.dependOnInheritedWidgetOfExactType (package:flutter/src/widgets/framework.dart:5085:14)
+#3      InheritedModel.inheritFrom (package:flutter/src/widgets/inherited_model.dart:194:22)
+#4      MediaQuery._maybeOf (package:flutter/src/widgets/media_query.dart:1551:27)
+#5      MediaQuery.maybeOf (package:flutter/src/widgets/media_query.dart:1547:12)
+#6      _SplashScreenState.initState (package:moviegpt_app/screens/splash_screen.dart:63:20)
+#7      StatefulElement._firstBuild (package:flutter/src/widgets/framework.dart:5950:55)
+#8      ComponentElement.mount (package:flutter/src/widgets/framework.dart:5793:5)
+...     Normal element mounting (260 frames)
+#268    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4587:20)
+#269    MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7264:36)
+#270    MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7279:32)

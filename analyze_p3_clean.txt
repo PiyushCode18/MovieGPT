@@ -1,0 +1,24 @@
+﻿Analyzing MovieGPT...                                           
+
+  error - Invalid constant value - lib\screens\ai_chat_screen.dart:58:24 - invalid_constant
+  error - Invalid constant value - lib\screens\ai_chat_screen.dart:197:20 - invalid_constant
+
+flutter : 2 issues found. 
+(ran in 24.3s)
+At line:1 char:44
++ ... TER 
+PROJECTS/MovieGPT"; 
+flutter analyze > 
+analyze_p3.txt 2>&1; 
+Write- ...
++                          
+   ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+    + CategoryInfo         
+     : NotSpecified: (2 i  
+  ssues found. (ran in 2   
+ 4.3s):String) [], Remo    
+teException
+    + FullyQualifiedErrorI 
+   d : NativeCommandError
+ 

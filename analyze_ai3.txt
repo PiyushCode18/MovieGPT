@@ -1,0 +1,14 @@
+﻿Analyzing ai_service.dart...                                    
+
+warning - Unused import: 'dart:typed_data'. Try removing the import directive - lib\services\ai_service.dart:3:8 - unused_import
+
+flutter : 1 issue found. (ran in 1.9s)
+At line:1 char:44
++ ... \MovieGPT"; flutter analyze 
+lib\services\ai_service.dart 2>&1 | Selec ...
++                 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (1 issue   
+  found. (ran in 1.9s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

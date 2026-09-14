@@ -1,0 +1,18 @@
+﻿Analyzing chat_providers.dart...                                
+
+warning - The '!' will have no effect because the receiver can't be null. Try removing the '!' operator - lib\state\chat_providers.dart:153:29 - unnecessary_non_null_assertion
+warning - The '!' will have no effect because the receiver can't be null. Try removing the '!' operator - lib\state\chat_providers.dart:167:23 - unnecessary_non_null_assertion
+  error - Undefined name 'streamedText'. Try correcting the name to one that is defined, or defining the name - lib\state\chat_providers.dart:216:11 - undefined_identifier
+  error - Undefined name 'streamedText'. Try correcting the name to one that is defined, or defining the name - lib\state\chat_providers.dart:228:11 - undefined_identifier
+
+flutter : 4 issues found. (ran in 1.9s)
+At line:1 char:125
++ ... iders.dart; flutter analyze 
+lib\state\chat_providers.dart 2>&1 | Sele ...
++                 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (4 issu 
+   es found. (ran in 1.9s):String) [], RemoteExcep  
+  tion
+    + FullyQualifiedErrorId : NativeCommandError
+ 

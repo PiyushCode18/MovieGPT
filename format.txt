@@ -1,0 +1,6 @@
+﻿Formatted lib/screens/movie_details_screen.dart
+Formatted lib/models/movie_model.dart
+Formatted lib/services/tmdb_api_service.dart
+Formatted lib/data/movie_repository.dart
+Formatted lib/state/providers.dart
+Formatted 6 files (5 changed) in 0.13 seconds.

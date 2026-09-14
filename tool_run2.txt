@@ -1,0 +1,118 @@
+﻿=== PIDOF (alive?) ===
+3786
+=== WINDOW STATE ===
+=== CRASH/FATAL/FlutterError scan (last 40) ===
+
+08-11 13:06:09.011  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Drive/Drive.apk' with 1 
+weak references
+08-11 13:06:09.026  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/product/app/ModuleMetadataGoogle/ModuleMetadataGoogle.apk' with 1 weak references
+08-11 13:06:09.026  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/system_ext/priv-app/AvatarPickerGoogle/AvatarPickerGoogle.apk' with 1 weak references
+08-11 13:06:09.027  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/system/priv-app/NetworkStackGoogle/NetworkStackGoogle.apk' with 1 weak references
+08-11 13:06:09.054  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/system/priv-app/TagGoogle/TagGoogle.apk' with 1 weak references
+08-11 13:06:09.056  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/system_ext/priv-app/NexusLauncherRelease/NexusLauncherRelease.apk' with 1 weak references
+08-11 13:06:09.057  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/product/overlay/FontNotoSerifSource/FontNotoSerifSourceOverlay.apk' with 1 weak references
+08-11 13:06:09.064  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/system/app/GooglePrintRecommendationService/GooglePrintRecommendationService.apk' with 1 weak references
+08-11 13:06:09.071  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/system/priv-app/DocumentsUIGoogle/DocumentsUIGoogle.apk' with 1 weak references
+08-11 13:06:09.076  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/system_ext/priv-app/SettingsGoogle/SettingsGoogle.apk' with 1 weak references
+08-11 13:06:09.106  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/system_ext/priv-app/WallpaperPickerGoogleRelease/WallpaperPickerGoogleRelease.apk' with 1 weak references
+08-11 13:06:09.108  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/system/priv-app/TeleService/TeleService.apk' with 1 weak references
+08-11 13:06:09.110  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/system_ext/priv-app/SystemUIGoogle/SystemUIGoogle.apk' with 1 weak references
+08-11 13:06:09.112  1306  1314 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/system/app/BluetoothMidiService/BluetoothMidiService.apk' with 1 weak references
+08-11 13:06:11.983  1375  1382 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/system_ext/priv-app/SystemUIGoogle/SystemUIGoogle.apk' with 1 weak references
+08-11 13:06:11.985  1375  1382 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Drive/Drive.apk' with 1 
+weak references
+08-11 13:06:11.990  1375  1382 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/product/app/PrebuiltDeskClockGoogle/PrebuiltDeskClockGoogle.apk' with 1 weak references
+08-11 13:06:11.994  1375  1382 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/YouTube/YouTube.apk' with 1 
+weak references
+08-11 13:06:12.825   880  3828 D NetworkMonitor/100: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 time=37ms ret=204 
+request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.32 
+Safari/537.36]} headers={null=[HTTP/1.1 204 No Content], Connection=[close], Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], 
+Date=[Tue, 11 Aug 2026 07:36:13 GMT], X-Android-Received-Millis=[1786433772823], X-Android-Response-Source=[NETWORK 204], 
+X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1786433772812]}
+08-11 13:06:12.922   880  3826 D NetworkMonitor/100: PROBE_FALLBACK http://play.googleapis.com/generate_204 time=65ms ret=204 
+request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.32 
+Safari/537.36]} headers={null=[HTTP/1.1 204 No Content], Connection=[close], Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], 
+Date=[Tue, 11 Aug 2026 07:36:13 GMT], X-Android-Received-Millis=[1786433772912], X-Android-Response-Source=[NETWORK 204], 
+X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1786433772898]}
+08-11 13:06:13.665   599   745 E system_server: Failed to open file 
+'/data/resource-cache/data@resource-cache@com.android.systemui-neutral-oDsU.frro@idmap': No such file or directory
+08-11 13:06:13.665   599   745 E system_server: failed to read IDMAP 
+/data/resource-cache/data@resource-cache@com.android.systemui-neutral-oDsU.frro@idmap
+08-11 13:06:13.705   599   745 W ResourcesManager: failed to preload asset path '/data/resource-cache/com.android.systemui-neutral-oDsU.frro'
+08-11 13:06:13.705   599   745 W ResourcesManager: java.io.IOException: Failed to load asset path 
+/data/resource-cache/data@resource-cache@com.android.systemui-neutral-oDsU.frro@idmap
+08-11 13:06:13.705   599   745 E system_server: Failed to open file 
+'/data/resource-cache/data@resource-cache@com.android.systemui-accent-PZ40.frro@idmap': No such file or directory
+08-11 13:06:13.705   599   745 E system_server: failed to read IDMAP 
+/data/resource-cache/data@resource-cache@com.android.systemui-accent-PZ40.frro@idmap
+08-11 13:06:13.705   599   745 W ResourcesManager: failed to preload asset path '/data/resource-cache/com.android.systemui-accent-PZ40.frro'
+08-11 13:06:13.705   599   745 W ResourcesManager: java.io.IOException: Failed to load asset path 
+/data/resource-cache/data@resource-cache@com.android.systemui-accent-PZ40.frro@idmap
+08-11 13:06:13.706   599   745 E system_server: Failed to open file 
+'/data/resource-cache/data@resource-cache@com.android.systemui-dynamic-5jum.frro@idmap': No such file or directory
+08-11 13:06:13.706   599   745 E system_server: failed to read IDMAP 
+/data/resource-cache/data@resource-cache@com.android.systemui-dynamic-5jum.frro@idmap
+08-11 13:06:13.706   599   745 W ResourcesManager: failed to preload asset path '/data/resource-cache/com.android.systemui-dynamic-5jum.frro'
+08-11 13:06:13.706   599   745 W ResourcesManager: java.io.IOException: Failed to load asset path 
+/data/resource-cache/data@resource-cache@com.android.systemui-dynamic-5jum.frro@idmap
+08-11 13:06:14.007   880  3858 D NetworkMonitor/100: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 time=22ms ret=204 
+request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.32 
+Safari/537.36]} headers={null=[HTTP/1.1 204 No Content], Connection=[close], Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], 
+Date=[Tue, 11 Aug 2026 07:36:14 GMT], X-Android-Received-Millis=[1786433774006], X-Android-Response-Source=[NETWORK 204], 
+X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1786433773997]}
+08-11 13:06:14.137   880  3857 D NetworkMonitor/100: PROBE_HTTPS https://www.google.com/generate_204 time=65ms ret=204 
+request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.32 
+Safari/537.36]} headers={null=[HTTP/1.1 204 No Content], Alt-Svc=[h3=":443"; ma=2592000,h3-29=":443"; ma=2592000], Connection=[close], 
+Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], Date=[Tue, 11 Aug 2026 07:36:15 GMT], 
+X-Android-Received-Millis=[1786433774121], X-Android-Response-Source=[NETWORK 204], X-Android-Selected-Protocol=[http/1.1], 
+X-Android-Sent-Millis=[1786433774111]}
+08-11 13:06:15.355   599  1602 W JobInfo : Job 'com.google.android.settings.intelligence/.modules.routines.impl.RoutinesJobIntentService#1728' 
+has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+08-11 13:06:15.413   599  1620 W JobInfo : Job 'com.google.android.settings.intelligence/.modules.routines.impl.RoutinesJobIntentService#1728' 
+has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+08-11 13:06:15.579  3264  3270 W gs.intelligence: ApkAssets: Deleting an ApkAssets object '<empty> and 
+/system_ext/priv-app/SettingsGoogle/SettingsGoogle.apk' with 1 weak references
+08-11 13:06:18.462  3786  3786 I flutter : FlutterError: Zone mismatch.
+08-11 13:06:18.462  3786  3786 I flutter : To make this warning fatal, set BindingBase.debugZoneErrorsAreFatal to true before the bindings are 
+initialized (i.e. as the first statement in `void main() { }`).
+08-11 13:06:19.434   599   617 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Drive/Drive.apk' with 1 weak 
+references
+
+
+=== LAST 20 lines generic log ===
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at com.android.server.wm.WindowManagerService.doDump(WindowManagerService.java:7284)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at com.android.server.wm.WindowManagerService.-$$Nest$mdoDump(WindowManagerService.java:0)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at com.android.server.wm.WindowManagerService$3.dump(WindowManagerService.java:556)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at com.android.server.utils.PriorityDump.dump(PriorityDump.java:182)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at com.android.server.wm.WindowManagerService.dump(WindowManagerService.java:7204)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at android.os.Binder.doDump(Binder.java:1166)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at android.os.Binder.dump(Binder.java:1156)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at android.os.Binder.onTransact(Binder.java:1022)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at android.view.IWindowManager$Stub.onTransact(IWindowManager.java:3308)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at com.android.server.wm.WindowManagerService.onTransact(WindowManagerService.java:1512)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at android.os.Binder.execTransactInternal(Binder.java:1505)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at android.os.Binder.execTransact(Binder.java:1444)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: Caused by: android.system.ErrnoException: write failed: EPIPE (Broken pipe)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at libcore.io.Linux.writeBytes(Native Method)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at libcore.io.Linux.write(Linux.java:296)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at libcore.io.ForwardingOs.write(ForwardingOs.java:943)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at libcore.io.BlockGuardOs.write(BlockGuardOs.java:448)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	at libcore.io.IoBridge.write(IoBridge.java:646)
+08-11 13:07:11.642   599  1602 W FastPrintWriter: 	... 21 more
+08-11 13:07:11.890  1071  1395 I NearbySharing: Network state changed: NetworkState(isRestricted=false, isOnline=true, isCongested=false, isMetered=false, isWifiConnected=true)
+RUN2_DONE

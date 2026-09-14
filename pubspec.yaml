@@ -1,0 +1,56 @@
+name: moviegpt_app
+description: "MovieGPT - AI-powered cinematic movie discovery app."
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  dio: ^5.7.0
+  flutter_riverpod: ^2.6.1
+  cached_network_image: ^3.4.1
+  shared_preferences: ^2.3.3
+  flutter_dotenv: ^5.2.1
+  firebase_core: ^3.12.0
+  google_sign_in: ^6.2.2
+  youtube_player_iframe: ^6.0.2
+  wakelock_plus: ^1.2.10
+  audioplayers: ^6.8.1
+  supabase_flutter: ^2.17.2
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/moviegpt_logo.png
+    - assets/sounds/splash_sound.wav
+    - .env
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  web:
+    generate: true
+    image_path: "assets/images/moviegpt_logo.png"
+    background_color: "#0D0D0D"
+    theme_color: "#0D0D0D"
+  windows:
+    generate: true
+    image_path: "assets/images/moviegpt_logo.png"
+    icon_size: 48
+  image_path: "assets/images/moviegpt_logo.png"
+  adaptive_icon_background: "#0D0D0D"
+  adaptive_icon_foreground: "assets/images/moviegpt_logo.png"
+  min_sdk_android: 23

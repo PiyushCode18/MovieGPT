@@ -1,0 +1,6 @@
+﻿00:02 +25: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +26: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:02 +27: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in horizontal (unbounded-height) list
+00:03 +28: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/movie_card_layout_test.dart: MovieCard renders in bounded grid cell without overflow
+00:03 +29: C:/FLUTTER/FLUTTER PROJECTS/MovieGPT/test/widget_test.dart: MovieGPT app smoke test
+00:04 +30: All tests passed!

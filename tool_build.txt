@@ -1,0 +1,11 @@
+﻿Running Gradle task 'assembleDebug'...                          
+flutter : Note: Some input files use or override a deprecated API.
+At line:1 char:44
++ ... ER\FLUTTER PROJECTS\MovieGPT'; flutter build apk --debug 2>&1 | Out-F ...
++                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Note: Some inpu...deprecated API.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Note: Recompile with -Xlint:deprecation for details.
+Running Gradle task 'assembleDebug'...                            156.1s
+ΓêÜ Built build\app\outputs\flutter-apk\app-debug.apk

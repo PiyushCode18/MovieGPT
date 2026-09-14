@@ -1,0 +1,7 @@
+﻿
+        applicationId = "com.piyushcode.moviegpt"
+        // minSdk 23 required for Firebase Auth phone verification.
+        minSdk = maxOf(23, flutter.minSdkVersion)
+        targetSdk = flutter.targetSdkVersion
+
+
