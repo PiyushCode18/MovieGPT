@@ -137,24 +137,57 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   Future<void> _initAudio() async {
     try {
+      if (kDebugMode) {
+        debugPrint('[MovieGPT Intro] Initializing cinematic audio...');
+      }
+
+      // Configure the audio context for a premium startup experience.
+      // This ensures sound plays reliably and respects system audio focus.
+      await AudioPlayer.global.setAudioContext(AudioContext(
+        android: const AudioContextAndroid(
+          contentType: AndroidContentType.music,
+          usageType: AndroidUsageType.media,
+          audioFocus: AndroidAudioFocus.gainTransient,
+        ),
+        iOS: AudioContextIOS(
+          category: AVAudioSessionCategory.ambient,
+          options: {
+            AVAudioSessionOptions.mixWithOthers,
+          },
+        ),
+      ));
+
       // Debug-only state logging.
       _stateSub = _audioPlayer.onPlayerStateChanged.listen((state) {
         if (kDebugMode) {
-          debugPrint('[splash] audio state: $state');
+          debugPrint('[MovieGPT Intro] Audio state: $state');
         }
       });
 
-      // Release resources as soon as playback finishes.
+      // Release resources as soon as playback finishes to keep the session clean.
       _completeSub = _audioPlayer.onPlayerComplete.listen((_) {
         unawaited(_audioPlayer.release().catchError((_) {}));
       });
 
+      // Load the asset explicitly before playing to ensure reliability on every launch.
+      final source = AssetSource('sounds/splash_sound.wav');
+
+      // Set volume before playback.
       await _audioPlayer.setVolume(0.85);
-      await _audioPlayer.play(AssetSource('sounds/splash_sound.wav'));
+
+      // Load and play. Using setSource + resume is more reliable than play()
+      // on cold starts or rapid restarts as it ensures the source is ready.
+      await _audioPlayer.setSource(source);
+
+      if (kDebugMode) {
+        debugPrint('[MovieGPT Intro] Audio source loaded, starting playback.');
+      }
+
+      await _audioPlayer.resume();
     } catch (e) {
       // Audio must never crash the splash or block navigation.
       if (kDebugMode) {
-        debugPrint('[splash] audio unavailable: $e');
+        debugPrint('[MovieGPT Intro] Audio failed: $e');
       }
     }
   }
