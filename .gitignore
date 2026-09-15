@@ -3,6 +3,13 @@
 .env.*
 !.env.example
 
+# Large debug/output files
+bcheck.txt
+test_layout2.txt
+test_layout_out.txt
+ai_analyze_out.txt
+ai_analyze_out_utf8.txt
+
 # Miscellaneous
 *.class
 *.log
