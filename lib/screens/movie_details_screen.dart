@@ -182,6 +182,8 @@ class MovieDetailsScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _metaRow(movie),
+                      const SizedBox(height: 10),
+                      _hindiBadge(movie),
                       const SizedBox(height: 20),
                       TrailerLanguageSection(movie: movie),
                       const SizedBox(height: 12),
@@ -223,6 +225,37 @@ class MovieDetailsScreen extends ConsumerWidget {
           ),
         );
       },
+    );
+  }
+
+  static Widget _hindiBadge(Movie movie) {
+    final bool isOriginalHindi = movie.originalLanguage == 'hi';
+    final bool hasHindiAudio = movie.spokenLanguages.contains('hi');
+
+    if (!isOriginalHindi && !hasHindiAudio) return const SizedBox.shrink();
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: AppTheme.aiPurple.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppTheme.aiPurple.withValues(alpha: 0.5)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.translate_rounded, color: AppTheme.aiPurple, size: 14),
+          const SizedBox(width: 6),
+          Text(
+            isOriginalHindi ? 'Original Hindi' : 'Hindi Audio Available',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

@@ -154,40 +154,40 @@ class TmdbApiService {
     return status == 429 || status == 503 || status == 408;
   }
 
-  Future<List<Movie>> getNowPlaying({int page = 1}) async {
+  Future<List<Movie>> getNowPlaying({int page = 1, String region = 'IN'}) async {
     final res = await _get(
       '/movie/now_playing',
-      query: {'page': page, 'language': 'en-US'},
+      query: {'page': page, 'language': 'en-US', 'region': region},
     );
     return (res.data['results'] as List)
         .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
         .toList();
   }
 
-  Future<List<Movie>> getPopular({int page = 1}) async {
+  Future<List<Movie>> getPopular({int page = 1, String region = 'IN'}) async {
     final res = await _get(
       '/movie/popular',
-      query: {'page': page, 'language': 'en-US'},
+      query: {'page': page, 'language': 'en-US', 'region': region},
     );
     return (res.data['results'] as List)
         .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
         .toList();
   }
 
-  Future<List<Movie>> getTopRated({int page = 1}) async {
+  Future<List<Movie>> getTopRated({int page = 1, String region = 'IN'}) async {
     final res = await _get(
       '/movie/top_rated',
-      query: {'page': page, 'language': 'en-US'},
+      query: {'page': page, 'language': 'en-US', 'region': region},
     );
     return (res.data['results'] as List)
         .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
         .toList();
   }
 
-  Future<List<Movie>> getUpcoming({int page = 1}) async {
+  Future<List<Movie>> getUpcoming({int page = 1, String region = 'IN'}) async {
     final res = await _get(
       '/movie/upcoming',
-      query: {'page': page, 'language': 'en-US'},
+      query: {'page': page, 'language': 'en-US', 'region': region},
     );
     return (res.data['results'] as List)
         .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
@@ -197,10 +197,11 @@ class TmdbApiService {
   Future<List<Movie>> getTrending({
     String timeWindow = 'day',
     int page = 1,
+    String region = 'IN',
   }) async {
     final res = await _get(
       '/trending/movie/$timeWindow',
-      query: {'page': page, 'language': 'en-US'},
+      query: {'page': page, 'language': 'en-US', 'region': region},
     );
     return (res.data['results'] as List)
         .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
@@ -211,37 +212,38 @@ class TmdbApiService {
   Future<PaginatedMovies> getTrendingPaged({
     String timeWindow = 'day',
     int page = 1,
+    String region = 'IN',
   }) async {
     final res = await _get(
       '/trending/movie/$timeWindow',
-      query: {'page': page, 'language': 'en-US'},
+      query: {'page': page, 'language': 'en-US', 'region': region},
     );
     return _parsePaginated(res.data);
   }
 
   /// Pageable variant of [getPopular].
-  Future<PaginatedMovies> getPopularPaged({int page = 1}) async {
+  Future<PaginatedMovies> getPopularPaged({int page = 1, String region = 'IN'}) async {
     final res = await _get(
       '/movie/popular',
-      query: {'page': page, 'language': 'en-US'},
+      query: {'page': page, 'language': 'en-US', 'region': region},
     );
     return _parsePaginated(res.data);
   }
 
   /// Pageable variant of [getTopRated].
-  Future<PaginatedMovies> getTopRatedPaged({int page = 1}) async {
+  Future<PaginatedMovies> getTopRatedPaged({int page = 1, String region = 'IN'}) async {
     final res = await _get(
       '/movie/top_rated',
-      query: {'page': page, 'language': 'en-US'},
+      query: {'page': page, 'language': 'en-US', 'region': region},
     );
     return _parsePaginated(res.data);
   }
 
   /// Pageable variant of [getNowPlaying].
-  Future<PaginatedMovies> getNowPlayingPaged({int page = 1}) async {
+  Future<PaginatedMovies> getNowPlayingPaged({int page = 1, String region = 'IN'}) async {
     final res = await _get(
       '/movie/now_playing',
-      query: {'page': page, 'language': 'en-US'},
+      query: {'page': page, 'language': 'en-US', 'region': region},
     );
     return _parsePaginated(res.data);
   }
@@ -401,19 +403,31 @@ class TmdbApiService {
 
   /// Fetches every video that TMDb has associated with the EXACT [movieId].
   ///
-  /// This is the single source of truth for trailer selection. The results are
-  /// always scoped to this one movie id — never a YouTube search and never a
-  /// different movie's data.
-  ///
-  /// NOTE: We deliberately do NOT pass a `language` filter here. TMDb returns
-  /// all available videos for the movie, and the [TrailerService] prioritizes
-  /// English while still accepting other-language official trailers when that
-  /// is all that exists.
-  Future<List<Trailer>> getMovieVideos(int movieId) async {
-    final res = await _get('/movie/$movieId/videos');
+  /// This is the single source of truth for trailer selection.
+  Future<List<Trailer>> getMovieVideos(int movieId, {String? language}) async {
+    final res = await _get(
+      '/movie/$movieId/videos',
+      query: language != null ? {'language': language} : null,
+    );
     return _asList(res.data['results'])
         .map((e) => Trailer.fromJson(_asMap(e)))
         .toList();
+  }
+
+  /// Fetches available translations for a movie.
+  Future<List<String>> getMovieTranslations(int movieId) async {
+    final res = await _get('/movie/$movieId/translations');
+    final translations = _asList(res.data['translations']);
+    return translations
+        .map((e) => _asMap(e)['iso_639_1'].toString())
+        .where((c) => c.isNotEmpty)
+        .toList();
+  }
+
+  /// Fetches watch providers for a movie in a specific region.
+  Future<Map<String, dynamic>> getWatchProviders(int movieId) async {
+    final res = await _get('/movie/$movieId/watch/providers');
+    return _asMap(res.data['results']);
   }
 
   /// Helper to parse a TMDB `results` list into [Movie]s (null-safe).

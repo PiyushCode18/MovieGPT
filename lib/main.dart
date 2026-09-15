@@ -160,6 +160,10 @@ Future<void> main() async {
           '[MovieGPT] Gemini model: '
           '${EnvConfig.geminiModel}',
         );
+
+        debugPrint(
+          '[MovieGPT] Google Auth enabled: true (Supabase OAuth)',
+        );
       }
 
  // ------------------------------------------------------------

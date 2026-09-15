@@ -283,6 +283,13 @@ final searchMoviesProvider = FutureProvider.family<List<Movie>, String>((
   return ref.watch(movieRepositoryProvider).searchMovies(query);
 });
 
+/// The currently selected language filter for movie discovery.
+/// `null` means "All Languages".
+final languageFilterProvider = StateProvider<String?>((ref) => null);
+
+/// Whether to filter for movies available in Hindi (Original or Dubbed).
+final hindiAvailableFilterProvider = StateProvider<bool>((ref) => false);
+
 final watchlistProvider = StateNotifierProvider<WatchlistNotifier, List<Movie>>(
   (ref) => WatchlistNotifier(),
 );

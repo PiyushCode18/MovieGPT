@@ -1,183 +1,78 @@
-# MovieGPT
+# MovieGPT 🎬
 
-**AI-Powered Cinematic Movie Discovery** — a premium, Netflix-style Flutter app
-with Firebase Authentication, TMDB-powered movie discovery, and an in-app
-YouTube trailer player.
+**MovieGPT** is an AI-powered cinematic movie discovery application. It combines real-time movie data from TMDB with the intelligence of Google Gemini to provide a personalized discovery experience.
 
----
+## 🚀 Features
 
-## ✨ Features
+- 🍿 **Browse & Search**: Explore popular, trending, top-rated, and upcoming movies.
+- 🤖 **AI Concierge**: Chat with different AI personalities to get tailored movie recommendations.
+- 🎞️ **Real Trailers**: Watch official trailers directly in the app with intelligent language fallback.
+- 🔐 **Authentication**: Secure login and registration powered by **Supabase Auth**.
+- ❤️ **Watchlist & Favorites**: Save movies you love for later.
+- 📱 **Premium UI**: Dark, cinematic design with smooth animations and glassmorphism.
 
-- 🔐 **Firebase Authentication**
-  - Google Sign-In
-  - Phone Number Login with OTP
-  - Persistent login across app restarts
-  - Secure logout (Firebase + Google + local session)
-- 🎬 **TMDB Movie Discovery**
-  - Trending, Popular, Top Rated, Upcoming, Now Playing
-  - Genre browsing, search, and AI-powered recommendations
-  - Detailed movie screen with cast, trailers, and similar titles
-- ▶️ **In-App Trailer Player**
-  - `youtube_player_iframe` (never opens YouTube app/browser)
-  - Trailer → teaser fallback
-  - Landscape full-screen with immersive system UI
-  - Trailer-only mode (no recommendations/comments)
-- 🎨 **Premium Dark UI**
-  - Material 3, Netflix-inspired design
-  - Smooth animations, rounded buttons, glassmorphism
-- 📱 **Optimized for Android**
+## 🛠️ Technologies Used
 
----
+- **Flutter**: Cross-platform application framework.
+- **Riverpod**: Robust state management.
+- **Google Gemini**: Large Language Model for intelligent chat and recommendations.
+- **TMDB API**: The primary source for movie metadata, posters, and trailers.
+- **Supabase**: Backend for authentication and persistent data.
+- **Dio**: Powerful HTTP client for API requests.
+- **Shared Preferences**: Local disk caching for offline-first experience.
 
-## 🚀 Quick Start
+## ⚙️ Environment Variables
 
-### 1. Firebase Setup
+The application requires a `.env` file in the project root. Create one based on `.env.example`:
 
-Firebase is required for Google and Phone sign-in. Follow the comprehensive
-guide in **[`FIREBASE_SETUP.md`](FIREBASE_SETUP.md)** which covers:
-
-- Creating a Firebase project
-- Registering the Android app (`com.piyushcode.moviegpt`)
-- Adding `android/app/google-services.json`
-- Registering SHA-1 / SHA-256 fingerprints
-- Enabling Google Sign-In and Phone Authentication
-- Generating `lib/firebase_options.dart` via `flutterfire configure`
-
-### 2. TMDB API Key
-
-For **local development**, add your TMDB Read Access Token to a `.env` file in
-the project root (the `.env` file is gitignored):
-
-```
-TMDB_API_KEY=your_tmdb_read_access_token_here
+```env
+TMDB_API_KEY=your_tmdb_api_key
+GEMINI_API_KEY=your_gemini_api_key
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+AI_PROVIDER=gemini
+GEMINI_MODEL=gemini-2.0-flash
 ```
 
-For **release builds**, pass the key at build time via `--dart-define` (this
-keeps the key out of plain `.env` and allows CI/CD injection):
+> **IMPORTANT**: Ensure `.env` is added to your `assets` section in `pubspec.yaml` to be loaded at runtime.
 
+## 🗄️ Database Setup (Supabase)
+
+If you are setting up the project for the first time or need to restore the database, run the SQL script provided in **`supabase_schema.sql`** in your Supabase SQL Editor. This will create:
+
+1. `profiles`: User profile data.
+2. `watchlists`: Movies saved for later.
+3. `favorites`: Movies marked as favorites.
+4. `chat_history`: (Optional) Persistent AI chat logs.
+
+## 🏃 Running Locally
+
+1. **Install Dependencies**:
+   ```bash
+   flutter pub get
+   ```
+
+2. **Configure Environment**:
+   Create your `.env` file as described above.
+
+3. **Run the App**:
+   ```bash
+   flutter run
+   ```
+
+## 🧪 Testing
+
+Run the test suite to verify the logic and AI integrations:
 ```bash
-flutter run --dart-define=TMDB_API_KEY=your_tmdb_read_access_token_here
-flutter build apk --release --dart-define=TMDB_API_KEY=your_tmdb_read_access_token_here
+flutter test
 ```
 
-### 3. Install & Run
+## 🔐 Security
 
-```bash
-flutter pub get
-flutter run
-```
+- **No Hardcoded Secrets**: All API keys are managed via environment variables.
+- **Offline First**: Movie lists and session data are cached locally to ensure stability without network.
+- **Defensive Parsing**: Models are designed to never crash on malformed API responses.
 
-### 4. Build a Release APK
+## 📜 License
 
-```bash
-flutter build apk --release --dart-define=TMDB_API_KEY=your_tmdb_read_access_token_here
-```
-
-The release build is signed with the upload keystore configured in
-`android/key.properties` (gitignored) and uses the application ID
-`com.piyushcode.moviegpt`.
-
----
-
-## 🔄 App Flow
-
-```
-Splash Screen
-   │
-   ▼
-Check Login Status (Firebase auth state)
-   │
-   ├── Logged In  ─────────────► Home Screen
-   │
-   └── Not Logged In ─────────► Login Screen
-                                 ├── Continue with Google
-                                 └── Continue with Mobile Number (OTP)
-```
-
----
-
-## 📁 Project Structure
-
-```
-lib/
-├── main.dart                 # App entry + Firebase init
-├── firebase_options.dart     # Generated Firebase config
-├── config/
-│   └── env_config.dart       # Environment/API key resolution
-├── data/
-│   └── movie_repository.dart # Repository pattern (caching)
-├── models/
-│   ├── app_user.dart         # Auth user model
-│   └── movie_model.dart      # Movie, Cast, Trailer, Genre models
-├── screens/
-│   ├── splash_screen.dart    # Auth-state routing
-│   ├── login_screen.dart     # Google + Phone login
-│   ├── otp_screen.dart       # OTP verification
-│   ├── home_screen.dart      # Home feed + Watch Trailer button
-│   ├── movie_details_screen.dart
-│   ├── trailer_screen.dart   # In-app trailer player
-│   ├── main_navigation_screen.dart
-│   ├── search_screen.dart
-│   ├── watchlist_screen.dart
-│   ├── ai_chat_screen.dart
-│   ├── collection_screen.dart
-│   └── profile_screen.dart   # Logout
-├── services/
-│   ├── auth_service.dart     # Firebase Auth logic
-│   ├── api_client.dart       # Dio setup
-│   └── tmdb_api_service.dart # TMDB endpoints
-├── state/
-│   ├── auth_providers.dart   # Auth state (Riverpod)
-│   └── providers.dart        # Movie providers (Riverpod)
-├── theme/
-│   └── app_theme.dart        # Design system
-└── widgets/                  # Reusable UI widgets
-```
-
----
-
-## 🛠️ Dependencies
-
-| Package | Purpose |
-|---------|---------|
-| `firebase_core` | Firebase initialization |
-| `firebase_auth` | Google + Phone authentication |
-| `google_sign_in` | Google account sign-in |
-| `youtube_player_iframe` | In-app trailer playback |
-| `dio` | HTTP client for TMDB |
-| `flutter_riverpod` | State management |
-| `cached_network_image` | Image caching |
-| `shared_preferences` | Local persistence (watchlist, session) |
-| `flutter_dotenv` | `.env` loading |
-| `google_fonts` | Typography |
-
----
-
-## 🎨 Launcher Icon
-
-The app uses a **premium circular adaptive icon** (dark purple-black clapperboard
-with a white play button and neon ring). All density mipmaps are served from:
-
-- `android/app/src/main/res/mipmap-{mdpi,hdpi,xhdpi,xxhdpi,xxxhdpi}/`
-- Adaptive icon layers: `mipmap-anydpi-v26/`, `drawable/ic_launcher_foreground.xml`
-
-To regenerate the icon from the master source, run:
-```bash
-powershell -ExecutionPolicy Bypass -File generate_launcher_icons.ps1
-```
-
----
-
-## 🧪 Testing & Analysis
-
-```bash
-flutter analyze       # 0 compile errors
-flutter test          # run widget tests
-```
-
----
-
-## 📄 Documentation
-
-- **[`FIREBASE_SETUP.md`](FIREBASE_SETUP.md)** — Full Firebase configuration guide.
-- **[`TODO.md`](TODO.md)** — Project rebuild checklist & status.
+This project is licensed under the MIT License.

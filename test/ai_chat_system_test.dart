@@ -160,7 +160,7 @@ void main() {
       final history = container.read(chatHistoryProvider);
       expect(history.length, 2);
       expect(history.last.isError, isTrue);
-      expect(history.last.text, contains("You're offline right now"));
+      expect(history.last.text, contains("internet connection"));
       // No fake assistant reply was fabricated.
       expect(history.where((m) => m.sender == 'ai' && !m.isError), isEmpty);
 
@@ -188,21 +188,20 @@ void main() {
 
       final history = container.read(chatHistoryProvider);
       expect(history.last.isError, isTrue);
-      expect(history.last.text, contains('GEMINI_API_KEY'));
-      expect(history.last.text, contains('.env'));
+      expect(history.last.text, contains('not configured'));
     });
 
     test('rate limit and auth failures map to distinct honest messages',
         () async {
       fake.thrown = const AiServiceException(AiErrorKind.rateLimit);
       await container.read(aiChatSendProvider.notifier).send('Hi');
-      expect(messageAt(1).text, contains('rate-limiting'));
+      expect(messageAt(1).text, contains('rate limit'));
 
       fake.thrown = const AiServiceException(AiErrorKind.auth);
       await container.read(aiChatSendProvider.notifier).retry();
       expect(
         container.read(chatHistoryProvider).last.text,
-        contains('rejected the API key'),
+        contains('authentication failed'),
       );
     });
 

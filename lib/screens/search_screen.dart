@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/movie_model.dart';
+import '../models/discover_filters.dart';
 import '../state/providers.dart';
 import '../theme/app_theme.dart';
 import '../widgets/movie_card.dart';
@@ -23,6 +24,18 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   final TextEditingController _controller = TextEditingController();
   String _query = '';
   Timer? _debounce;
+
+  static const _languages = [
+    (null, 'All'),
+    ('hi', 'Hindi'),
+    ('en', 'English'),
+    ('ta', 'Tamil'),
+    ('te', 'Telugu'),
+    ('ml', 'Malayalam'),
+    ('kn', 'Kannada'),
+    ('bn', 'Bengali'),
+    ('mr', 'Marathi'),
+  ];
 
   @override
   void dispose() {
@@ -55,6 +68,23 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     final searchAsync = _query.isEmpty
         ? null
         : ref.watch(searchMoviesProvider(_query));
+
+    final selectedLang = ref.watch(languageFilterProvider);
+    final hindiAvailable = ref.watch(hindiAvailableFilterProvider);
+
+    // If a filter is active and we're NOT searching, show filtered discovery.
+    final bool isDiscoveryMode = _query.isEmpty && (selectedLang != null || hindiAvailable);
+    
+    final discoveryAsync = isDiscoveryMode 
+        ? ref.watch(discoverMoviesProvider(DiscoverFilters(
+            withOriginalLanguage: selectedLang,
+            watchRegion: 'IN',
+            // If "Hindi Available" is checked, we don't have a direct TMDb filter,
+            // so we'll treat it as "Original Hindi" for now if no other lang selected,
+            // or we could use watch providers if we knew the IDs.
+            // For now, let's keep it simple: Hindi filter = withOriginalLanguage: hi.
+          )))
+        : null;
 
     return Scaffold(
       backgroundColor: AppTheme.bgDark,
@@ -137,15 +167,82 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                             size: 20,
                           ),
                         ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.mic_none_rounded,
-                          color: AppTheme.primaryRed,
-                        ),
-                        onPressed: () {},
-                      ),
                     ],
                   ),
+                ),
+              ),
+            ),
+
+            // Language Filter Row
+            SliverToBoxAdapter(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                child: Row(
+                  children: [
+                    for (final lang in _languages)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ChoiceChip(
+                          label: Text(lang.$2),
+                          selected: selectedLang == lang.$1,
+                          onSelected: (selected) {
+                            ref.read(languageFilterProvider.notifier).state =
+                                selected ? lang.$1 : null;
+                          },
+                          backgroundColor: AppTheme.cardDark,
+                          selectedColor: AppTheme.primaryRed,
+                          labelStyle: TextStyle(
+                            color: selectedLang == lang.$1
+                                ? Colors.white
+                                : AppTheme.textSecondary,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            side: BorderSide(
+                              color: selectedLang == lang.$1
+                                  ? AppTheme.primaryRed
+                                  : AppTheme.cardBorder,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Hindi Dubbed Toggle
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                child: Row(
+                  children: [
+                    FilterChip(
+                      label: const Text('Hindi Available / Dubbed'),
+                      selected: hindiAvailable,
+                      onSelected: (selected) {
+                        ref.read(hindiAvailableFilterProvider.notifier).state = selected;
+                        // If checking this, also ensure region is set to IN (already handled in discovery logic)
+                      },
+                      backgroundColor: AppTheme.cardDark,
+                      selectedColor: AppTheme.aiPurple.withValues(alpha: 0.3),
+                      checkmarkColor: AppTheme.aiPurple,
+                      labelStyle: TextStyle(
+                        color: hindiAvailable ? Colors.white : AppTheme.textSecondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: hindiAvailable ? AppTheme.aiPurple : AppTheme.cardBorder,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -154,7 +251,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             if (searchAsync != null) ...[
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   child: SectionHeader(
                     title: 'Results for "$_query"',
                     actionLabel: 'Clear',
@@ -163,15 +260,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 ),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 12)),
-              // Search loading state
               if (searchAsync.isLoading)
                 const SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 480,
-                    child: MovieCardSkeletonGrid(
-                      crossAxisCount: 3,
-                      childAspectRatio: 0.42,
-                    ),
+                  child: MovieCardSkeletonGrid(
+                    crossAxisCount: 3,
+                    childAspectRatio: 0.42,
                   ),
                 )
               else if (searchAsync.hasError)
@@ -193,8 +286,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   ),
                 )
               else
-                // Grid placed directly as a sliver (NOT inside
-                // SliverToBoxAdapter) to avoid RenderSliver errors.
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   sliver: SliverGrid(
@@ -223,11 +314,67 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 ),
             ],
 
-            // ===== DEFAULT MODE: POPULAR GENRES =====
-            if (searchAsync == null) ...[
+            // ===== DISCOVERY MODE (FILTERED) =====
+            if (isDiscoveryMode && discoveryAsync != null) ...[
               SliverToBoxAdapter(
                 child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  child: SectionHeader(
+                    title: selectedLang != null 
+                        ? '${_languages.firstWhere((l) => l.$1 == selectedLang).$2} Movies'
+                        : 'Discover',
+                  ),
+                ),
+              ),
+              if (discoveryAsync.isLoading)
+                const SliverToBoxAdapter(
+                  child: MovieCardSkeletonGrid(
+                    crossAxisCount: 3,
+                    childAspectRatio: 0.42,
+                  ),
+                )
+              else if (discoveryAsync.hasError)
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: _ErrorState(
+                    message: 'Could not load movies',
+                    onRetry: () => ref.invalidate(discoverMoviesProvider),
+                  ),
+                )
+              else
+                SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
+                  sliver: SliverGrid(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final movie = discoveryAsync.valueOrNull![index];
+                      return MovieCard(
+                        movie: movie,
+                        width: double.infinity,
+                        showMatch: false,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                MovieDetailsScreen(movieId: movie.id),
+                          ),
+                        ),
+                      );
+                    }, childCount: discoveryAsync.valueOrNull!.length),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: 0.42,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
+                  ),
+                ),
+            ],
+
+            // ===== DEFAULT MODE: POPULAR GENRES =====
+            if (_query.isEmpty && !isDiscoveryMode) ...[
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   child: SectionHeader(title: 'Popular Genres'),
                 ),
               ),
@@ -266,7 +413,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   ),
                 )
               else
-                // Genre grid placed directly as a sliver.
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   sliver: SliverGrid(

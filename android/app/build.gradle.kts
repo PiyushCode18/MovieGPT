@@ -7,15 +7,6 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-// Apply the Firebase Google Services plugin ONLY when google-services.json is
-// present. This lets the project build and run (guest mode) before the user
-// adds their Firebase config — and automatically enables Firebase Auth once
-// they drop in `android/app/google-services.json`.
-val googleServicesFile = File(rootProject.projectDir, "app/google-services.json")
-if (googleServicesFile.exists()) {
-    apply(plugin = "com.google.gms.google-services")
-}
-
 // Load release signing config from the local (gitignored) `key.properties` file.
 // If the file is absent, the release build falls back to debug signing so the
 // project still compiles — but you MUST create a keystore + key.properties
@@ -39,7 +30,6 @@ android {
 
     defaultConfig {
         applicationId = "com.piyushcode.moviegpt"
-                // minSdk 23 is the minimum required for Firebase Auth.
         minSdk = maxOf(23, flutter.minSdkVersion)
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

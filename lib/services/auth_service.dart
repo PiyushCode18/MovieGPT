@@ -61,16 +61,15 @@ class AuthService {
   /// → URL Configuration
   /// → Redirect URLs
   ///
-  /// For your production website:
-  /// https://moviegpt.dev/auth/callback
+  /// For local development, this detects the origin (origin + port) dynamically.
   String get _redirectUrl {
     if (kIsWeb) {
-      return 'https://moviegpt.dev/auth/callback';
+      // Use the dynamic origin of the running app (includes port for localhost).
+      final String origin = Uri.base.origin;
+      return '$origin/auth/callback';
     }
 
     // Android / iOS deep-link fallback.
-    // Configure this deep link in the respective platform later
-    // if you need native Google OAuth.
     return 'io.moviegpt.app://login-callback';
   }
 

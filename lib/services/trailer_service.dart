@@ -110,15 +110,22 @@ class TrailerService {
 
     Trailer? selected;
     try {
-      if (kDebugMode) {
-        debugPrint('[TRAILER] Movie: ${movie.title}');
-        debugPrint('[TRAILER] TMDB ID: ${movie.id}');
-      }
-      final videos = await _api.getMovieVideos(movie.id);
-      if (kDebugMode) {
-        debugPrint('[TRAILER] Videos received: ${videos.length}');
-      }
+      // 1. Try fetching without language restriction (usually returns most results).
+      var videos = await _api.getMovieVideos(movie.id);
       selected = selectBestTrailer(movie, videos);
+
+      // 2. Fallback: Try en-US specifically if no trailer found.
+      if (selected == null) {
+        videos = await _api.getMovieVideos(movie.id, language: 'en-US');
+        selected = selectBestTrailer(movie, videos);
+      }
+
+      // 3. Fallback: Try movie's original language specifically.
+      if (selected == null && movie.originalLanguage != 'en') {
+        videos = await _api.getMovieVideos(movie.id,
+            language: movie.originalLanguage);
+        selected = selectBestTrailer(movie, videos);
+      }
     } catch (e) {
       if (kDebugMode) {
         debugPrint(
@@ -401,31 +408,30 @@ class TrailerService {
   }
 
   /// Priority ranking per the documented trailer-selection rules.
-/// Order respects: Official > Trailer > English > Hindi (dubbed) > Other languages.
-int _priority(Trailer v) {
-  final isTrailer = v.isTrailer;
-  final isTeaser = v.isTeaser;
-  final official = v.official;
-  final en = v.isEnglish;
-  final hi = v.isHindi; // added: Hindi dubbed detection
+  /// Priority:
+  /// 1. Official YouTube Trailer (English)
+  /// 2. Official YouTube Trailer (Any)
+  /// 3. YouTube Trailer (English)
+  /// 4. YouTube Trailer (Any)
+  /// 5. Official YouTube Teaser (English)
+  /// 6. Official YouTube Teaser (Any)
+  /// 7. YouTube Teaser
+  /// 8. Other valid YouTube promotional video
+  int _priority(Trailer v) {
+    final isTrailer = v.isTrailer;
+    final isTeaser = v.isTeaser;
+    final official = v.official;
+    final en = v.isEnglish;
 
- // Highest priority: Official trailer in English
-  if (official && isTrailer && en) return 0;
-  // High priority: Official Hindi dubbed trailer
-  if (official && isTrailer && hi) return 1;
-  // Official trailer in any language (non-English, non-Hindi)
-  if (official && isTrailer) return 2;
-  // Trailer + English
-  if (isTrailer && en) return 3;
-  // Trailer + Hindi dubbed
-  if (isTrailer && hi) return 4;
-  // Trailer in any other language
-  if (isTrailer) return 5;
-  // Teaser
-  if (isTeaser) return 6;
-  // Other YouTube video (rare last resort)
-  return 7;
-}
+    if (official && isTrailer && en) return 0;
+    if (official && isTrailer) return 1;
+    if (isTrailer && en) return 2;
+    if (isTrailer) return 3;
+    if (official && isTeaser && en) return 4;
+    if (official && isTeaser) return 5;
+    if (isTeaser) return 6;
+    return 7;
+  }
   void _logUnavailable(Movie movie, String reason) {
     if (kDebugMode) {
       debugPrint(

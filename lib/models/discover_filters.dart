@@ -12,6 +12,8 @@ class DiscoverFilters {
   final String? releaseDateGte; // primary_release_date.gte
   final String? releaseDateLte; // primary_release_date.lte
   final String sortBy; // e.g. popularity.desc
+  final List<int>? withWatchProviders; // with_watch_providers (TMDb provider ids)
+  final String? watchRegion; // watch_region (ISO 3166-1)
 
   const DiscoverFilters({
     this.genreId,
@@ -23,6 +25,8 @@ class DiscoverFilters {
     this.releaseDateGte,
     this.releaseDateLte,
     this.sortBy = 'popularity.desc',
+    this.withWatchProviders,
+    this.watchRegion,
   });
 
   /// Converts to the TMDb discover query parameter map.
@@ -39,6 +43,9 @@ class DiscoverFilters {
         'primary_release_date.gte': releaseDateGte,
       if (releaseDateLte != null)
         'primary_release_date.lte': releaseDateLte,
+      if (withWatchProviders != null && withWatchProviders!.isNotEmpty)
+        'with_watch_providers': withWatchProviders!.join('|'),
+      if (watchRegion != null) 'watch_region': watchRegion,
       'sort_by': sortBy,
     };
   }

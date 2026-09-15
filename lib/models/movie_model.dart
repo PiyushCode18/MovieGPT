@@ -28,6 +28,9 @@ class Movie {
   /// ISO 639-1 original language code from TMDb (e.g. "en", "hi", "ko").
   final String originalLanguage;
 
+  /// List of ISO 639-1 language codes available for this movie (audio).
+  final List<String> spokenLanguages;
+
   const Movie({
     this.id = 0,
     required this.title,
@@ -51,6 +54,7 @@ class Movie {
     this.production = '',
     this.status = 'Released',
     this.originalLanguage = '',
+    this.spokenLanguages = const [],
   });
 
   /// Build a URL for a TMDB image with the given [size] width prefix.
@@ -108,6 +112,7 @@ class Movie {
       production: production ?? this.production,
       status: status ?? this.status,
       originalLanguage: originalLanguage,
+      spokenLanguages: spokenLanguages,
     );
   }
 
@@ -148,6 +153,12 @@ class Movie {
               .join(', ')
         : '';
 
+    final spoken = (json['spoken_languages'] as List?)
+            ?.map((l) => _asStringMap(l)['iso_639_1'].toString())
+            .where((c) => c.isNotEmpty)
+            .toList() ??
+        [];
+
     final voteAverage = ((json['vote_average'] as num?) ?? 0).toDouble();
     final matchScore = (voteAverage * 10 + 18).round().clamp(0, 99);
 
@@ -176,6 +187,7 @@ class Movie {
       production: production,
       status: json['status'] ?? 'Released',
       originalLanguage: json['original_language'] ?? '',
+      spokenLanguages: spoken,
     );
   }
 
@@ -210,6 +222,7 @@ class Movie {
     'production': production,
     'status': status,
     'original_language': originalLanguage,
+    'spoken_languages': spokenLanguages,
   };
 
   /// Rebuild a [Movie] from a locally-stored JSON map.
@@ -233,6 +246,7 @@ class Movie {
     production: json['production'] ?? '',
     status: json['status'] ?? 'Released',
     originalLanguage: json['original_language'] ?? '',
+    spokenLanguages: (json['spoken_languages'] as List?)?.cast<String>() ?? const [],
   );
 
   /// Builds honest, metadata-derived reasoning text for the details screen.

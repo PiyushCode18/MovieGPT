@@ -157,7 +157,7 @@ class EnvConfig {
 
   /// Gemini model.
   ///
-  /// Default: gemini-3.6-flash
+  /// Default: gemini-2.0-flash
   static String get geminiModel {
     final model = _resolve(
       _geminiModel,
@@ -165,7 +165,7 @@ class EnvConfig {
     );
 
     return model.isEmpty
-        ? 'gemini-3.6-flash'
+        ? 'gemini-2.0-flash'
         : model;
   }
 

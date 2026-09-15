@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -472,13 +473,18 @@ class _TrailerScreenState extends ConsumerState<TrailerScreen>
             player = const _PlayerLoading();
             break;
           case _TrailerLoadState.unavailable:
-            player = _PlayerUnavailable(onRetry: _retry, onBack: _handleBack);
+            player = _PlayerUnavailable(
+              onRetry: _retry,
+              onBack: _handleBack,
+              videoKey: widget.trailer?.key,
+            );
             break;
           case _TrailerLoadState.error:
             player = _PlayerError(
               message: 'Trailer unavailable',
               onRetry: _retry,
               onBack: _handleBack,
+              videoKey: widget.trailer?.key,
             );
             break;
           case _TrailerLoadState.ready:
@@ -492,6 +498,7 @@ class _TrailerScreenState extends ConsumerState<TrailerScreen>
                 onReset: _markReset,
                 onRetry: _retry,
                 onBack: _handleBack,
+                videoKey: widget.trailer?.key,
               );
             }
             break;
@@ -503,15 +510,13 @@ class _TrailerScreenState extends ConsumerState<TrailerScreen>
 }
 
 /// Renders the embedded player plus a reactive loading / error overlay.
-///
-/// Uses [YoutubeValueBuilder] to react to the controller's stream (buffering,
-/// error, playing) WITHOUT calling `setState` during the parent's build.
 class _PlayerWithState extends StatelessWidget {
   final YoutubePlayerController controller;
-    final VoidCallback onStarted;
+  final VoidCallback onStarted;
   final VoidCallback onReset;
   final VoidCallback onRetry;
   final VoidCallback onBack;
+  final String? videoKey;
 
   const _PlayerWithState({
     required this.controller,
@@ -519,6 +524,7 @@ class _PlayerWithState extends StatelessWidget {
     required this.onReset,
     required this.onRetry,
     required this.onBack,
+    this.videoKey,
   });
 
   @override
@@ -548,9 +554,10 @@ class _PlayerWithState extends StatelessWidget {
             Widget? centerOverlay;
             if (hasError) {
               centerOverlay = _PlayerError(
-                message: 'Trailer unavailable',
+                message: 'Unable to play the trailer here.',
                 onRetry: onRetry,
                 onBack: onBack,
+                videoKey: videoKey,
               );
             } else if (isBuffering) {
               centerOverlay = const Center(child: _PlayerLoading());
@@ -558,7 +565,10 @@ class _PlayerWithState extends StatelessWidget {
 
             return Stack(
               fit: StackFit.expand,
-              children: [const SizedBox.shrink(), ?centerOverlay],
+              children: [
+                const SizedBox.shrink(),
+                ?centerOverlay,
+              ],
             );
           },
         ),
@@ -610,8 +620,13 @@ class _PlayerLoading extends StatelessWidget {
 class _PlayerUnavailable extends StatelessWidget {
   final VoidCallback onRetry;
   final VoidCallback onBack;
+  final String? videoKey;
 
-  const _PlayerUnavailable({required this.onRetry, required this.onBack});
+  const _PlayerUnavailable({
+    required this.onRetry, 
+    required this.onBack,
+    this.videoKey,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -628,10 +643,14 @@ class _PlayerUnavailable extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             const Text(
-              'Trailer unavailable',
-              style: TextStyle(color: AppTheme.textSecondary, fontSize: 15),
+              'No trailer is available for this movie.',
+              style: TextStyle(color: AppTheme.textSecondary, fontSize: 14),
             ),
             const SizedBox(height: 16),
+            if (videoKey != null) ...[
+              _YoutubeFallbackButton(videoKey: videoKey!),
+              const SizedBox(height: 8),
+            ],
             TextButton.icon(
               onPressed: onRetry,
               icon: const Icon(
@@ -662,17 +681,17 @@ class _PlayerUnavailable extends StatelessWidget {
   }
 }
 
-/// Error state with a "Trailer unavailable" message, a "Try again" and a
-/// "Go Back" action. Never substitutes another video.
 class _PlayerError extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
   final VoidCallback onBack;
+  final String? videoKey;
 
   const _PlayerError({
     required this.message,
     required this.onRetry,
     required this.onBack,
+    this.videoKey,
   });
 
   @override
@@ -700,7 +719,11 @@ class _PlayerError extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
+            if (videoKey != null) ...[
+              _YoutubeFallbackButton(videoKey: videoKey!),
+              const SizedBox(height: 8),
+            ],
             TextButton.icon(
               onPressed: onRetry,
               icon: const Icon(
@@ -726,6 +749,31 @@ class _PlayerError extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _YoutubeFallbackButton extends StatelessWidget {
+  final String videoKey;
+  const _YoutubeFallbackButton({required this.videoKey});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      onPressed: () async {
+        final url = Uri.parse('https://www.youtube.com/watch?v=$videoKey');
+        if (await canLaunchUrl(url)) {
+          await launchUrl(url, mode: LaunchMode.externalApplication);
+        }
+      },
+      icon: const Icon(Icons.open_in_new_rounded, size: 18),
+      label: const Text('Watch on YouTube'),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white12,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
