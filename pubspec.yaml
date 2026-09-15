@@ -1,4 +1,4 @@
-name: moviegpt_app
+﻿name: moviegpt_app
 description: "MovieGPT - AI-powered cinematic movie discovery app."
 publish_to: "none"
 
@@ -35,7 +35,6 @@ flutter:
   assets:
     - assets/images/moviegpt_logo.png
     - assets/sounds/splash_sound.wav
-    - .env
 
 flutter_launcher_icons:
   android: true
