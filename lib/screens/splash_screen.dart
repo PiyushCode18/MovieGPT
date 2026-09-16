@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../main.dart';
 import '../models/app_user.dart';
 import '../state/auth_providers.dart';
 import '../state/guest_provider.dart';
@@ -217,6 +218,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     _navigated = true;
     _safetyTimer?.cancel();
+
+    // Ensure dependencies (dotenv, Supabase) are initialized before navigating.
+    try {
+      if (MovieGptApp.initFuture != null) {
+        await MovieGptApp.initFuture;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('[MovieGPT Splash] Initialization error during navigation: $e');
+      }
+    }
 
     AppUser? user;
     try {

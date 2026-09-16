@@ -24,6 +24,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   final TextEditingController _controller = TextEditingController();
   String _query = '';
   Timer? _debounce;
+  bool _isDebouncing = false;
 
   static const _languages = [
     (null, 'All'),
@@ -47,13 +48,27 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   /// Debounce search input so network calls only fire after the user pauses,
   /// and cancel any in-flight debounce when the widget is disposed.
   void _onQueryChanged(String value) {
-    _debounce?.cancel();
     final trimmed = value.trim();
-    final timer = Timer(const Duration(milliseconds: 400), () {
+    if (trimmed == _query) {
+      if (_isDebouncing) {
+        _debounce?.cancel();
+        setState(() => _isDebouncing = false);
+      }
+      return;
+    }
+
+    _debounce?.cancel();
+    if (!_isDebouncing) {
+      setState(() => _isDebouncing = true);
+    }
+    
+    _debounce = Timer(const Duration(milliseconds: 300), () {
       if (!mounted) return;
-      setState(() => _query = trimmed);
+      setState(() {
+        _query = trimmed;
+        _isDebouncing = false;
+      });
     });
-    _debounce = timer;
   }
 
   void _clearSearch() {
@@ -158,14 +173,23 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                           ),
                         ),
                       ),
-                      if (_query.isNotEmpty)
+                      if (_query.isNotEmpty || _isDebouncing)
                         GestureDetector(
                           onTap: _clearSearch,
-                          child: const Icon(
-                            Icons.close_rounded,
-                            color: AppTheme.textMuted,
-                            size: 20,
-                          ),
+                          child: _isDebouncing
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: AppTheme.primaryRed,
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.close_rounded,
+                                  color: AppTheme.textMuted,
+                                  size: 20,
+                                ),
                         ),
                     ],
                   ),

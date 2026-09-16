@@ -20,8 +20,8 @@ class ApiClient {
     dio = Dio(
       BaseOptions(
         baseUrl: 'https://api.themoviedb.org/3',
-        connectTimeout: const Duration(seconds: 15),
-        receiveTimeout: const Duration(seconds: 20),
+        connectTimeout: const Duration(seconds: 8),
+        receiveTimeout: const Duration(seconds: 10),
         headers: {'Accept': 'application/json'},
       ),
     );

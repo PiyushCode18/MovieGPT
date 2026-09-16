@@ -50,6 +50,7 @@ class TmdbApiService {
     String path, {
     Map<String, dynamic>? query,
     int attempt = 0,
+    CancelToken? cancelToken,
   }) async {
     if (!isConfigured) {
       throw const TmdbApiException(
@@ -57,9 +58,16 @@ class TmdbApiService {
       );
     }
     try {
-      final response = await _dio.get(path, queryParameters: query);
+      final response = await _dio.get(
+        path,
+        queryParameters: query,
+        cancelToken: cancelToken,
+      );
       return response;
     } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        rethrow;
+      }
       final status = e.response?.statusCode;
       final isTransient = _isTransientFailure(e, status);
 
@@ -512,7 +520,11 @@ class TmdbApiService {
     return _parsePaginated(res.data);
   }
 
-  Future<List<Movie>> searchMovies(String query, {int page = 1}) async {
+  Future<List<Movie>> searchMovies(
+    String query, {
+    int page = 1,
+    CancelToken? cancelToken,
+  }) async {
     if (query.trim().isEmpty) return const [];
     final res = await _get(
       '/search/movie',
@@ -522,6 +534,7 @@ class TmdbApiService {
         'language': 'en-US',
         'include_adult': false,
       },
+      cancelToken: cancelToken,
     );
     return (res.data['results'] as List)
         .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
@@ -535,6 +548,7 @@ class TmdbApiService {
   Future<PaginatedMovies> searchMoviesPaged(
     String query, {
     int page = 1,
+    CancelToken? cancelToken,
   }) async {
     if (query.trim().isEmpty) return const PaginatedMovies();
     final res = await _get(
@@ -545,6 +559,7 @@ class TmdbApiService {
         'language': 'en-US',
         'include_adult': false,
       },
+      cancelToken: cancelToken,
     );
     return _parsePaginated(res.data);
   }

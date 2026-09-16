@@ -114,126 +114,61 @@ Future<void> main() async {
       // LOAD ENVIRONMENT VARIABLES
       // ------------------------------------------------------------
 
-      try {
-        await dotenv.load(
-          fileName: '.env',
-        );
-      } catch (e) {
-        if (kDebugMode) {
-          debugPrint(
-            '[MovieGPT] WARNING: Could not load .env: $e',
-          );
-        }
-      }
-
-      // ------------------------------------------------------------
-      // CONFIGURATION DIAGNOSTICS
-      // ------------------------------------------------------------
-
-      if (kDebugMode) {
-        debugPrint(
-          '[MovieGPT] TMDB configured: '
-          '${EnvConfig.hasApiKey}',
-        );
-
-        debugPrint(
-          '[MovieGPT] Gemini configured: '
-          '${EnvConfig.hasGeminiConfig}',
-        );
-
-        debugPrint(
-          '[MovieGPT] OpenAI configured: '
-          '${EnvConfig.hasOpenAiConfig}',
-        );
-
-        debugPrint(
-          '[MovieGPT] Supabase configured: '
-          '${EnvConfig.hasSupabaseConfig}',
-        );
-
-        debugPrint(
-          '[MovieGPT] AI provider: '
-          '${EnvConfig.aiProvider}',
-        );
-
-        debugPrint(
-          '[MovieGPT] Gemini model: '
-          '${EnvConfig.geminiModel}',
-        );
-
-        debugPrint(
-          '[MovieGPT] Google Auth enabled: true (Supabase OAuth)',
-        );
-      }
-
- // ------------------------------------------------------------
-// SUPABASE INITIALIZATION
-// ------------------------------------------------------------
-
-if (!EnvConfig.hasSupabaseConfig) {
-  debugPrint(
-    '[MovieGPT] ERROR: Supabase is not configured.',
-  );
-
-  debugPrint(
-    '[MovieGPT] Check SUPABASE_URL and '
-    'SUPABASE_ANON_KEY in .env',
-  );
-} else {
-  try {
-    await Supabase.initialize(
-      url: EnvConfig.supabaseUrl,
-      publishableKey: EnvConfig.supabaseAnonKey,
-    );
-
-    if (kDebugMode) {
-      debugPrint(
-        '[MovieGPT] Supabase initialized successfully.',
-      );
-    }
-  } catch (e, stack) {
-    debugPrint(
-      '[MovieGPT] Supabase initialization failed: $e',
-    );
-
-    if (kDebugMode) {
-      debugPrint('$stack');
-    }
-
-    // Do not allow the app to continue with an
-    // uninitialized Supabase instance.
-    return;
-  }
-}
-      // ------------------------------------------------------------
-      // START APPLICATION
-      // ------------------------------------------------------------
-
       runApp(
         const ProviderScope(
           child: MovieGptApp(),
         ),
       );
+
+      // Initialize dependencies in the background while Splash is animating.
+      MovieGptApp.initFuture = _initializeDependencies();
     },
     (Object error, StackTrace stack) {
-      // ------------------------------------------------------------
-      // GLOBAL ASYNC ERROR HANDLER
-      // ------------------------------------------------------------
-
-      debugPrint(
-        '[MovieGPT] Uncaught async error: $error',
-      );
-
-      if (kDebugMode) {
-        debugPrint('$stack');
-      }
+      debugPrint('[MovieGPT] Uncaught async error: $error');
+      if (kDebugMode) debugPrint('$stack');
     },
   );
+}
+
+/// Handles all heavy startup initialization.
+Future<void> _initializeDependencies() async {
+  // 1. Load Environment Variables
+  try {
+    await dotenv.load(fileName: '.env');
+  } catch (e) {
+    debugPrint('[MovieGPT] WARNING: Could not load .env: $e');
+  }
+
+  // 2. Diagnostics
+  if (kDebugMode) {
+    EnvConfig.debugPrintConfig();
+  }
+
+  // 3. Supabase Initialization
+  if (EnvConfig.hasSupabaseConfig) {
+    try {
+      await Supabase.initialize(
+        url: EnvConfig.supabaseUrl,
+        publishableKey: EnvConfig.supabaseAnonKey,
+      );
+      if (kDebugMode) {
+        debugPrint('[MovieGPT] Supabase initialized successfully.');
+      }
+    } catch (e, stack) {
+      debugPrint('[MovieGPT] Supabase initialization failed: $e');
+      if (kDebugMode) debugPrint('$stack');
+    }
+  } else {
+    debugPrint('[MovieGPT] ERROR: Supabase is not configured.');
+  }
 }
 
 /// Main MovieGPT application.
 class MovieGptApp extends StatelessWidget {
   const MovieGptApp({super.key});
+
+  /// Stores the heavy initialization future.
+  static Future<void>? initFuture;
 
   @override
   Widget build(BuildContext context) {

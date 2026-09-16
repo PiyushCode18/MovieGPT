@@ -39,7 +39,7 @@ class MoviePoster extends StatelessWidget {
     this.height,
     this.radius = 16,
     this.fit = BoxFit.cover,
-    this.size = 'w500',
+    this.size = 'w342',
     this.heroTag,
   });
 

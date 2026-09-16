@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -280,7 +281,12 @@ final searchMoviesProvider = FutureProvider.family<List<Movie>, String>((
   ref,
   query,
 ) {
-  return ref.watch(movieRepositoryProvider).searchMovies(query);
+  final cancelToken = CancelToken();
+  ref.onDispose(() => cancelToken.cancel());
+
+  return ref
+      .watch(movieRepositoryProvider)
+      .searchMovies(query, cancelToken: cancelToken);
 });
 
 /// The currently selected language filter for movie discovery.

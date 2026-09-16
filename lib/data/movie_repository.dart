@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/movie_model.dart';
@@ -373,10 +374,18 @@ class MovieRepository {
     return bundle.similar;
   }
 
-  Future<List<Movie>> searchMovies(String query) async {
+  Future<List<Movie>> searchMovies(
+    String query, {
+    CancelToken? cancelToken,
+  }) async {
     if (query.trim().isEmpty) return const [];
     if (!_isLive) throw Exception('TMDB API key not configured');
-    return _api.searchMovies(query);
+
+    final key = 'search-${query.trim().toLowerCase()}';
+    return _withFallback(
+      key,
+      () => _api.searchMovies(query, cancelToken: cancelToken),
+    );
   }
 
   /// Movies released in the current (runtime-generated) [year].
