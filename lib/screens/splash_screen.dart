@@ -150,7 +150,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           audioFocus: AndroidAudioFocus.gainTransient,
         ),
         iOS: AudioContextIOS(
-          category: AVAudioSessionCategory.ambient,
+          category: AVAudioSessionCategory.playback,
           options: {
             AVAudioSessionOptions.mixWithOthers,
           },

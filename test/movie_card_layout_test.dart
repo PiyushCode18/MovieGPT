@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:moviegpt_app/models/movie_model.dart';
@@ -26,14 +27,16 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: SizedBox(
-            height: 302,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 10,
-              itemBuilder: (_, _) => MovieCard(movie: movie),
+      ProviderScope(
+        child: MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              height: 302,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 10,
+                itemBuilder: (_, _) => MovieCard(movie: movie),
+              ),
             ),
           ),
         ),
@@ -48,18 +51,20 @@ void main() {
   ) async {
     try {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 0.42,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
+        ProviderScope(
+          child: MaterialApp(
+            home: Scaffold(
+              body: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 0.42,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                ),
+                itemCount: 10,
+                itemBuilder: (_, _) =>
+                    MovieCard(movie: movie, width: double.infinity),
               ),
-              itemCount: 10,
-              itemBuilder: (_, _) =>
-                  MovieCard(movie: movie, width: double.infinity),
             ),
           ),
         ),

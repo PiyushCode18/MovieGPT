@@ -35,6 +35,7 @@ flutter:
   assets:
     - assets/images/moviegpt_logo.png
     - assets/sounds/splash_sound.wav
+    - .env
 
 flutter_launcher_icons:
   android: true
