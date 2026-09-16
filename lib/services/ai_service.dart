@@ -179,7 +179,7 @@ abstract class AiClient {
 /// Real AI conversation backend for MovieGPT.
 ///
 /// Supports:
-///  * **Google Gemini** (`GEMINI_API_KEY`, default model `gemini-3.6-flash`)
+///  * **Google Gemini** (`GEMINI_API_KEY`, default model `gemini-2.0-flash`)
 ///  * **Any OpenAI-compatible API** (`OPENAI_API_KEY` + optional
 ///    `OPENAI_BASE_URL` / `OPENAI_MODEL`) — OpenAI, Groq, OpenRouter, etc.
 ///

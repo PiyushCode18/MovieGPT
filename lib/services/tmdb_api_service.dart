@@ -53,7 +53,7 @@ class TmdbApiService {
   }) async {
     if (!isConfigured) {
       throw const TmdbApiException(
-        'TMDB API key not configured. Add TMDB_API_KEY to your .env file.',
+        'TMDB API is not configured. Please check your environment variables or .env file.',
       );
     }
     try {

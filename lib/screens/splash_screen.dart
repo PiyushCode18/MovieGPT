@@ -77,6 +77,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   bool _navigated = false;
   bool _reducedMotion = false;
+  bool _audioStarted = false;
+
   @override
   void initState() {
     super.initState();
@@ -85,7 +87,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
     _audioPlayer = AudioPlayer();
-    unawaited(_initAudio());
+    
+    // On non-web platforms, we can try to start audio immediately.
+    // On Web, this will likely fail until a user interaction occurs.
+    if (!kIsWeb) {
+      unawaited(_initAudio());
+    }
 
     _controller = AnimationController(vsync: this, duration: _total)
       ..addStatusListener(_onStatus);
@@ -136,13 +143,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   // ---------------------------------------------------------------------------
 
   Future<void> _initAudio() async {
+    if (_audioStarted) return;
+    
     try {
       if (kDebugMode) {
         debugPrint('[MovieGPT Intro] Initializing cinematic audio...');
       }
 
       // Configure the audio context for a premium startup experience.
-      // This ensures sound plays reliably and respects system audio focus.
       await AudioPlayer.global.setAudioContext(AudioContext(
         android: const AudioContextAndroid(
           contentType: AndroidContentType.music,
@@ -157,38 +165,45 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         ),
       ));
 
-      // Debug-only state logging.
+      _stateSub?.cancel();
       _stateSub = _audioPlayer.onPlayerStateChanged.listen((state) {
         if (kDebugMode) {
           debugPrint('[MovieGPT Intro] Audio state: $state');
         }
       });
 
-      // Release resources as soon as playback finishes to keep the session clean.
+      _completeSub?.cancel();
       _completeSub = _audioPlayer.onPlayerComplete.listen((_) {
         unawaited(_audioPlayer.release().catchError((_) {}));
       });
 
-      // Load the asset explicitly before playing to ensure reliability on every launch.
+      // Load the asset explicitly.
       final source = AssetSource('sounds/splash_sound.wav');
-
-      // Set volume before playback.
+      await _audioPlayer.setSource(source);
       await _audioPlayer.setVolume(0.85);
 
-      // Load and play. Using setSource + resume is more reliable than play()
-      // on cold starts or rapid restarts as it ensures the source is ready.
-      await _audioPlayer.setSource(source);
-
       if (kDebugMode) {
-        debugPrint('[MovieGPT Intro] Audio source loaded, starting playback.');
+        debugPrint('[MovieGPT Intro] Audio source loaded.');
       }
 
+      // Attempt playback.
       await _audioPlayer.resume();
+      _audioStarted = true;
+      
+      if (kDebugMode) {
+        debugPrint('[MovieGPT Intro] Audio playback started.');
+      }
     } catch (e) {
-      // Audio must never crash the splash or block navigation.
       if (kDebugMode) {
         debugPrint('[MovieGPT Intro] Audio failed: $e');
       }
+    }
+  }
+
+  /// Manually triggers audio playback. Used to satisfy Web autoplay requirements.
+  void _handleInteraction() {
+    if (!_audioStarted && kIsWeb) {
+      unawaited(_initAudio());
     }
   }
   // ---------------------------------------------------------------------------
@@ -412,64 +427,114 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   ),
                 );
           // ---- Main cinematic layout -----------------------------------
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              const Positioned.fill(child: _CinematicBackdrop()),
-              volLightLayer,
-              smoke,
-              particles,
-              sparks,
-              glowLayer,
+          return GestureDetector(
+            onTap: _handleInteraction,
+            behavior: HitTestBehavior.opaque,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                const Positioned.fill(child: _CinematicBackdrop()),
+                volLightLayer,
+                smoke,
+                particles,
+                sparks,
+                glowLayer,
 
-              // Logo + branding centerpiece.
-              Center(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Opacity(
-                    opacity: opacity,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Transform.scale(scale: scale, child: emblem),
-                        SizedBox(height: logoSize * 0.16),
-                        Transform.translate(
-                          offset: Offset(0, textSlide),
-                          child: Opacity(opacity: textOpacity, child: brand),
-                        ),
-                        const SizedBox(height: 18),
-                        Opacity(opacity: tagOpacity, child: tagline),
-                        const SizedBox(height: 20),
-                        Transform.translate(
-                          offset: Offset(0, textSlide * 0.5),
-                          child: Opacity(
-                            opacity: lineOpacity,
-                            child: Container(
-                              width: logoSize * 0.62,
-                              height: 1.4,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.transparent,
-                                    AppTheme.primaryRed.withValues(alpha: 0.0),
-                                    AppTheme.primaryRed.withValues(alpha: 0.8),
-                                    AppTheme.primaryRed.withValues(alpha: 0.0),
-                                    Colors.transparent,
-                                  ],
-                                  stops: const [0.0, 0.2, 0.5, 0.8, 1.0],
+                // Logo + branding centerpiece.
+                Center(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Opacity(
+                      opacity: opacity,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Transform.scale(scale: scale, child: emblem),
+                          SizedBox(height: logoSize * 0.16),
+                          Transform.translate(
+                            offset: Offset(0, textSlide),
+                            child: Opacity(opacity: textOpacity, child: brand),
+                          ),
+                          const SizedBox(height: 18),
+                          Opacity(opacity: tagOpacity, child: tagline),
+                          const SizedBox(height: 20),
+                          Transform.translate(
+                            offset: Offset(0, textSlide * 0.5),
+                            child: Opacity(
+                              opacity: lineOpacity,
+                              child: Container(
+                                width: logoSize * 0.62,
+                                height: 1.4,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.transparent,
+                                      AppTheme.primaryRed.withValues(alpha: 0.0),
+                                      AppTheme.primaryRed.withValues(alpha: 0.8),
+                                      AppTheme.primaryRed.withValues(alpha: 0.0),
+                                      Colors.transparent,
+                                    ],
+                                    stops: const [0.0, 0.2, 0.5, 0.8, 1.0],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-              flare,
-            ],
+                flare,
+
+                // Web-only subtle interaction hint if audio is blocked.
+                if (kIsWeb && !_audioStarted)
+                  Positioned(
+                    bottom: 40,
+                    left: 0,
+                    right: 0,
+                    child: FadeInWidget(
+                      duration: const Duration(milliseconds: 800),
+                      child: Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.black45,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: Colors.white24,
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.volume_up_rounded,
+                                color: Colors.white70,
+                                size: 16,
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                'TAP TO UNMUTE EXPERIENCE',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           );
         },
       ),
@@ -1020,4 +1085,47 @@ class _GlowPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_GlowPainter oldDelegate) => oldDelegate.alpha != alpha;
+}
+
+// =============================================================================
+// HELPERS
+// =============================================================================
+
+class FadeInWidget extends StatefulWidget {
+  final Widget child;
+  final Duration duration;
+
+  const FadeInWidget({
+    super.key,
+    required this.child,
+    this.duration = const Duration(milliseconds: 500),
+  });
+
+  @override
+  State<FadeInWidget> createState() => _FadeInWidgetState();
+}
+
+class _FadeInWidgetState extends State<FadeInWidget>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: widget.duration);
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(opacity: _animation, child: widget.child);
+  }
 }
