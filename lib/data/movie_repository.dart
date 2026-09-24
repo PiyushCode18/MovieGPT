@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/movie_model.dart';
@@ -210,10 +211,15 @@ class MovieRepository {
     if (!_isLive) throw Exception('TMDB API key not configured');
     try {
       return await _api.getMovieDetails(969681);
-    } catch (_) {
-      final trending = await _api.getTrending(timeWindow: 'day');
-      if (trending.isNotEmpty) return trending.first;
-      throw Exception('Unable to fetch featured movie');
+    } catch (e) {
+      debugPrint('[MovieGPT] Featured movie fetch failed: $e');
+      try {
+        final trending = await _api.getTrending(timeWindow: 'day');
+        if (trending.isNotEmpty) return trending.first;
+      } catch (trendingError) {
+        debugPrint('[MovieGPT] Trending fallback failed: $trendingError');
+      }
+      throw Exception('Unable to load featured movie. Please check your connection.');
     }
   }
 
@@ -269,7 +275,13 @@ class MovieRepository {
 
   Future<List<Movie>> getUpcoming() async {
     if (!_isLive) throw Exception('TMDB API key not configured');
-    return _withFallback('upcoming', () => _api.getUpcoming());
+    return _withFallback('upcoming', () async {
+      final movies = await _api.getUpcoming();
+      return movies.where((m) {
+        final path = m.posterPath;
+        return path != null && path.trim().isNotEmpty && path != 'null';
+      }).toList();
+    });
   }
 
   Future<List<Movie>> getByGenre(int genreId, {int page = 1}) async {
@@ -408,6 +420,8 @@ class MovieRepository {
   /// Bounded by the 12–18 month window so the home/see-all never shows dated
   /// rows. The date range is baked into the cache key so it never serves
   /// stale upcoming data across different ranges.
+  ///
+  /// Strictly filters out movies without a poster to ensure a premium UI.
   Future<PaginatedMovies> getUpcomingRange({
     required DateTime start,
     required DateTime end,
@@ -418,7 +432,21 @@ class MovieRepository {
     final lte = _fmtDate(end);
     return _withPagedFallback(
       'upcoming-$gte-$lte-page-$page',
-      () => _api.getUpcomingRange(gte: gte, lte: lte, page: page),
+      () async {
+        final result = await _api.getUpcomingRange(gte: gte, lte: lte, page: page);
+        // Filter out movies with missing or invalid poster paths specifically
+        // for the "Upcoming" section as requested.
+        final filteredMovies = result.movies.where((m) {
+          final path = m.posterPath;
+          return path != null && path.trim().isNotEmpty && path != 'null';
+        }).toList();
+
+        return PaginatedMovies(
+          movies: filteredMovies,
+          page: result.page,
+          totalPages: result.totalPages,
+        );
+      },
     );
   }
 

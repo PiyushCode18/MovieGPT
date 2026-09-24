@@ -106,15 +106,15 @@ class TmdbApiService {
       }
 
       if (status == 401) {
-        message = 'Invalid TMDB API key. Check your configuration.';
+        message = 'Invalid TMDB API key (401). Check your Netlify configuration.';
       } else if (status == 403) {
-        message = 'Access denied by TMDB. Check your API access level.';
+        message = 'Access denied by TMDB (403). Check your API access level.';
       } else if (status == 404) {
-        message = 'Movie not found on TMDB.';
+        message = 'Movie not found on TMDB (404).';
       } else if (status == 429) {
-        message = 'TMDB rate limit reached. Please try again shortly.';
+        message = 'TMDB rate limit reached (429). Please try again shortly.';
       } else if (status == 500) {
-        message = 'TMDB server error. Please try again later.';
+        message = 'TMDB server error (500). Please try again later.';
       } else if (status != null && status >= 500) {
         message = 'TMDB server error ($status). Please try again later.';
       }
@@ -167,9 +167,7 @@ class TmdbApiService {
       '/movie/now_playing',
       query: {'page': page, 'language': 'en-US', 'region': region},
     );
-    return (res.data['results'] as List)
-        .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
-        .toList();
+    return _moviesFromResults(res.data['results']);
   }
 
   Future<List<Movie>> getPopular({int page = 1, String region = 'IN'}) async {
@@ -177,9 +175,7 @@ class TmdbApiService {
       '/movie/popular',
       query: {'page': page, 'language': 'en-US', 'region': region},
     );
-    return (res.data['results'] as List)
-        .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
-        .toList();
+    return _moviesFromResults(res.data['results']);
   }
 
   Future<List<Movie>> getTopRated({int page = 1, String region = 'IN'}) async {
@@ -187,9 +183,7 @@ class TmdbApiService {
       '/movie/top_rated',
       query: {'page': page, 'language': 'en-US', 'region': region},
     );
-    return (res.data['results'] as List)
-        .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
-        .toList();
+    return _moviesFromResults(res.data['results']);
   }
 
   Future<List<Movie>> getUpcoming({int page = 1, String region = 'IN'}) async {
@@ -197,9 +191,7 @@ class TmdbApiService {
       '/movie/upcoming',
       query: {'page': page, 'language': 'en-US', 'region': region},
     );
-    return (res.data['results'] as List)
-        .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
-        .toList();
+    return _moviesFromResults(res.data['results']);
   }
 
   Future<List<Movie>> getTrending({
@@ -211,9 +203,7 @@ class TmdbApiService {
       '/trending/movie/$timeWindow',
       query: {'page': page, 'language': 'en-US', 'region': region},
     );
-    return (res.data['results'] as List)
-        .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
-        .toList();
+    return _moviesFromResults(res.data['results']);
   }
 
   /// Pageable variant of [getTrending].
@@ -266,9 +256,7 @@ class TmdbApiService {
         'sort_by': 'popularity.desc',
       },
     );
-    return (res.data['results'] as List)
-        .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
-        .toList();
+    return _moviesFromResults(res.data['results']);
   }
 
   /// Discovers movies matching the structured [DiscoverFilters].
@@ -289,9 +277,7 @@ class TmdbApiService {
         'include_adult': false,
       },
     );
-    return (res.data['results'] as List)
-        .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
-        .toList();
+    return _moviesFromResults(res.data['results']);
   }
 
   /// Discovers movies originally produced in [countryCode] (ISO 3166-1).
@@ -314,9 +300,7 @@ class TmdbApiService {
         'sort_by': 'popularity.desc',
       },
     );
-    return (res.data['results'] as List)
-        .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
-        .toList();
+    return _moviesFromResults(res.data['results']);
   }
 
   /// Fetch upcoming blockbusters from the TMDB Upcoming endpoint.
@@ -440,7 +424,20 @@ class TmdbApiService {
 
   /// Helper to parse a TMDB `results` list into [Movie]s (null-safe).
   List<Movie> _moviesFromResults(Object? results) {
-    return _asList(results).map((e) => Movie.fromJson(_asMap(e))).toList();
+    if (results is! List) return const [];
+    return results
+        .map((e) {
+          try {
+            return Movie.fromJson(_asMap(e));
+          } catch (err) {
+            if (kDebugMode) {
+              debugPrint('[MovieGPT] Error parsing movie: $err');
+            }
+            return null;
+          }
+        })
+        .whereType<Movie>()
+        .toList();
   }
 
   /// Parses a pageable TMDB response into [PaginatedMovies] (null-safe).
@@ -536,9 +533,8 @@ class TmdbApiService {
       },
       cancelToken: cancelToken,
     );
-    return (res.data['results'] as List)
-        .map((e) => Movie.fromJson(Map<String, dynamic>.from(e as Map)))
-        .toList();
+    final results = res.data['results'];
+    return _moviesFromResults(results);
   }
 
   /// Pageable search (used for the search screen's infinite scroll).

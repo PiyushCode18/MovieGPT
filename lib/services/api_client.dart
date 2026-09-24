@@ -5,12 +5,10 @@ import '../config/env_config.dart';
 
 /// Centralized Dio HTTP client configured for the TMDB API.
 class ApiClient {
-  /// Primary TMDB API origin (documented base URL).
+  /// Primary TMDB API origin (official standard).
   static const String _primaryOrigin = 'https://api.themoviedb.org/3';
 
-  /// TMDB's real alternate API hostname. Serves the identical v3 API and is
-  /// used ONLY as a transparent fallback when the primary origin fails at the
-  /// connection level (see the onError interceptor below).
+  /// alternate origin used as transparent fallback.
   static const String _fallbackOrigin = 'https://api.tmdb.org/3';
 
   /// Extra key marking a request that already used the fallback host.
@@ -19,9 +17,9 @@ class ApiClient {
   ApiClient._internal() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'https://api.themoviedb.org/3',
-        connectTimeout: const Duration(seconds: 8),
-        receiveTimeout: const Duration(seconds: 10),
+        baseUrl: _primaryOrigin,
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 12),
         headers: {'Accept': 'application/json'},
       ),
     );
@@ -34,23 +32,18 @@ class ApiClient {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          options.queryParameters['api_key'] = EnvConfig.tmdbApiKey;
+          final apiKey = EnvConfig.tmdbApiKey;
+          if (apiKey.isEmpty) {
+            debugPrint('[MovieGPT] WARNING: TMDB API key is empty in interceptor.');
+          }
+          options.queryParameters['api_key'] = apiKey;
           handler.next(options);
         },
       ),
     );
 
-    // Resilience: some networks / security software terminate the TLS
-    // handshake to `api.themoviedb.org` specifically (verified on Windows:
-    // connection reset right after the ClientHello, while other HTTPS hosts
-    // on the same CloudFront IPs work fine). TMDB operates the identical v3
-    // API on its real alternate hostname `api.tmdb.org` (same endpoints, same
-    // key handling, valid TLS certificate). When the primary host fails at
-    // the CONNECTION level (no HTTP response at all), the request is retried
-    // ONCE against the fallback host. No data is ever faked: a fallback
-    // response comes from the real TMDB API. Requests that already used the
-    // fallback, or that received an actual HTTP response (401/404/429/5xx...),
-    // are never retried here.
+    // Resilience: If the primary host fails at the CONNECTION level,
+    // retry transparently against the fallback host.
     dio.interceptors.add(
       InterceptorsWrapper(
         onError: (e, handler) async {
@@ -58,10 +51,6 @@ class ApiClient {
           final alreadyUsed = opts.extra[_kFallbackUsed] == true;
           final isPrimaryHost = opts.baseUrl.startsWith(_primaryOrigin);
           // Connection-level failure = NO HTTP response came back at all.
-          // NOTE: dio wraps TLS handshake failures (HandshakeException) as
-          // DioExceptionType.unknown with the original error attached, so
-          // `unknown` with a null response is included here on purpose.
-          // On Web, e.error might be null even for network errors.
           final connectionLevelFailure = e.response == null &&
               (e.type == DioExceptionType.connectionError ||
                   e.type == DioExceptionType.connectionTimeout ||
@@ -75,7 +64,7 @@ class ApiClient {
           if (kDebugMode) {
             debugPrint(
               '[MovieGPT] TMDB primary host unreachable (${e.type.name}) — '
-              'retrying once via fallback host api.tmdb.org',
+              'retrying once via fallback host $_fallbackOrigin',
             );
           }
           try {

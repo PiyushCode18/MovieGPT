@@ -79,7 +79,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: RepaintBoundary(
                   child: featuredAsync.when(
                     loading: () => HeroSkeleton(height: _heroHeight(context)),
-                    error: (_, _) => _HeroError(
+                    error: (error, _) => _HeroError(
+                      error: error,
                       onRetry: () => ref.invalidate(featuredMovieProvider),
                     ),
                     data: (movie) => _HeroCard(movie: movie),
@@ -387,7 +388,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           loading: () => const MovieRowSkeleton(),
           // Errors get a dedicated, honest error state with retry — they are
           // never disguised as an empty result ("No ... movies").
-          error: (_, _) => _SectionError(onRetry: retry),
+          error: (error, _) => _SectionError(
+            error: error,
+            onRetry: retry,
+          ),
           data: (movies) {
             if (movies.isEmpty) {
               return _EmptySection(emptyMessage);
@@ -406,15 +410,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       itemCount: movies.length,
       separatorBuilder: (_, _) => const SizedBox(width: 16),
       itemBuilder: (context, index) {
-        final movie = movies[index];
-        return MovieCard(
-          movie: movie,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => MovieDetailsScreen(movieId: movie.id),
+        try {
+          final movie = movies[index];
+          return MovieCard(
+            movie: movie,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => MovieDetailsScreen(movieId: movie.id),
+              ),
             ),
-          ),
-        );
+          );
+        } catch (e) {
+          return const SizedBox.shrink();
+        }
       },
     );
   }
@@ -820,45 +828,63 @@ class _EmptySection extends StatelessWidget {
 }
 
 /// A retryable error placeholder for a movie row.
-///
-/// Data-loading failures are NEVER disguised as an empty result: a TMDB
-/// outage / configuration problem shows this honest error state with a Retry
-/// action, while genuinely empty results keep using [_EmptySection].
 class _SectionError extends StatelessWidget {
+  final dynamic error;
   final VoidCallback onRetry;
-  const _SectionError({required this.onRetry});
+  const _SectionError({this.error, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
+    String detail = '';
+    if (error != null) {
+      detail = error.toString().replaceAll('Exception: ', '');
+    }
+
     return SizedBox(
       height: 302,
       child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.cloud_off_rounded,
-              color: AppTheme.textMuted,
-              size: 32,
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Could not load movies.\n'
-              'Check your connection and try again.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppTheme.textMuted, fontSize: 14),
-            ),
-            const SizedBox(height: 10),
-            OutlinedButton.icon(
-              onPressed: onRetry,
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppTheme.primaryRed,
-                side: const BorderSide(color: AppTheme.primaryRed),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.cloud_off_rounded,
+                color: AppTheme.textMuted,
+                size: 32,
               ),
-              icon: const Icon(Icons.refresh_rounded, size: 18),
-              label: const Text('Retry'),
-            ),
-          ],
+              const SizedBox(height: 8),
+              const Text(
+                'Could not load movies.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+              if (detail.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(
+                  detail,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: AppTheme.textMuted, fontSize: 11),
+                ),
+              ],
+              const SizedBox(height: 10),
+              OutlinedButton.icon(
+                onPressed: onRetry,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppTheme.primaryRed,
+                  side: const BorderSide(color: AppTheme.primaryRed),
+                ),
+                icon: const Icon(Icons.refresh_rounded, size: 18),
+                label: const Text('Retry'),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -867,13 +893,20 @@ class _SectionError extends StatelessWidget {
 
 /// A retryable error placeholder for the featured hero.
 class _HeroError extends StatelessWidget {
+  final dynamic error;
   final VoidCallback onRetry;
-  const _HeroError({required this.onRetry});
+  const _HeroError({this.error, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final heroHeight = (width * 0.95).clamp(320.0, 420.0).toDouble();
+
+    String detail = '';
+    if (error != null) {
+      detail = error.toString().replaceAll('Exception: ', '');
+    }
+
     return Container(
       height: heroHeight,
       margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -883,26 +916,41 @@ class _HeroError extends StatelessWidget {
         border: Border.all(color: AppTheme.cardBorder),
       ),
       child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.cloud_off_rounded,
-              color: AppTheme.textMuted,
-              size: 40,
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              'Could not load featured movie',
-              style: TextStyle(color: AppTheme.textSecondary),
-            ),
-            const SizedBox(height: 12),
-            ElevatedButton.icon(
-              onPressed: onRetry,
-              icon: const Icon(Icons.refresh_rounded),
-              label: const Text('Retry'),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.cloud_off_rounded,
+                color: AppTheme.textMuted,
+                size: 40,
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Could not load featured movie',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              if (detail.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(
+                  detail,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                ),
+              ],
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh_rounded),
+                label: const Text('Retry'),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -21,6 +21,27 @@ echo "======================================"
 flutter config --enable-web
 
 echo "======================================"
+echo "Creating environment file from variables"
+echo "======================================"
+
+# This ensures that even if --dart-define has issues, flutter_dotenv will have the values.
+# These variables are injected by Netlify from the site configuration.
+cat << EOF > .env
+TMDB_API_KEY=${TMDB_API_KEY}
+GEMINI_API_KEY=${GEMINI_API_KEY}
+GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.6-flash}
+AI_PROVIDER=${AI_PROVIDER:-gemini}
+AI_BACKEND_URL=${AI_BACKEND_URL:-}
+OPENAI_API_KEY=${OPENAI_API_KEY:-}
+OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
+OPENAI_MODEL=${OPENAI_MODEL:-}
+SUPABASE_URL=${SUPABASE_URL}
+SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+EOF
+
+echo "Environment file created."
+
+echo "======================================"
 echo "Getting dependencies"
 echo "======================================"
 
@@ -29,6 +50,10 @@ flutter pub get
 echo "======================================"
 echo "Checking production configuration"
 echo "======================================"
+
+# Apply sensible defaults if not explicitly set
+export GEMINI_MODEL="${GEMINI_MODEL:-gemini-3.6-flash}"
+export AI_PROVIDER="${AI_PROVIDER:-gemini}"
 
 required_vars=(
   "TMDB_API_KEY"

@@ -13,10 +13,10 @@ Get-Content (Join-Path $PSScriptRoot '..\.env') | ForEach-Object {
   }
 }
 
-$tmdbKey    = $envMap['TMDB_API_KEY']
-$geminiKey  = $envMap['GEMINI_API_KEY']
-$geminiModel = if ($envMap['GEMINI_MODEL']) { $envMap['GEMINI_MODEL'] } else { 'gemini-2.5-flash' }
-$aiProvider = $envMap['AI_PROVIDER']
+$tmdbKey     = $envMap['TMDB_API_KEY']
+$geminiKey   = $envMap['GEMINI_API_KEY']
+$geminiModel = if ($envMap['GEMINI_MODEL']) { $envMap['GEMINI_MODEL'] } else { 'gemini-3.6-flash' }
+$aiProvider  = if ($envMap['AI_PROVIDER']) { $envMap['AI_PROVIDER'] } else { 'gemini' }
 
 Write-Output ("CONFIG: TMDB key present: {0}" -f [bool]$tmdbKey)
 Write-Output ("CONFIG: GEMINI key present: {0}" -f [bool]$geminiKey)
@@ -27,7 +27,7 @@ function Get-TmdbCount([string]$Path, [hashtable]$Query) {
   try {
     $q = $Query.Clone()
     $q['api_key'] = $tmdbKey
-    $resp = Invoke-RestMethod -Uri "https://api.themoviedb.org/3$Path" -Body $q -Method Get -TimeoutSec 30
+    $resp = Invoke-RestMethod -Uri "https://api.tmdb.org/3$Path" -Body $q -Method Get -TimeoutSec 30
     return @{ ok = $true; count = $resp.results.Count; total = $resp.total_results }
   } catch {
     $code = $null
@@ -58,10 +58,10 @@ foreach ($g in @(@('Adventure',12), @('Action',28), @('Comedy',35), @('Drama',18
 
 # 4. Search + videos (trailer pipeline) for Interstellar
 try {
-  $s = Invoke-RestMethod -Uri 'https://api.themoviedb.org/3/search/movie' -Body @{ api_key = $tmdbKey; query = 'Interstellar'; language = 'en-US' } -Method Get -TimeoutSec 30
+  $s = Invoke-RestMethod -Uri 'https://api.tmdb.org/3/search/movie' -Body @{ api_key = $tmdbKey; query = 'Interstellar'; language = 'en-US' } -Method Get -TimeoutSec 30
   $first = $s.results | Select-Object -First 1
   Write-Output ("TMDB search 'Interstellar': ok=True total={0} first='{1}' (id {2}, {3})" -f $s.total_results, $first.title, $first.id, $first.release_date)
-  $v = Invoke-RestMethod -Uri "https://api.themoviedb.org/3/movie/$($first.id)/videos" -Body @{ api_key = $tmdbKey; language = 'en-US' } -Method Get -TimeoutSec 30
+  $v = Invoke-RestMethod -Uri "https://api.tmdb.org/3/movie/$($first.id)/videos" -Body @{ api_key = $tmdbKey; language = 'en-US' } -Method Get -TimeoutSec 30
   $yt = @($v.results | Where-Object { $_.site -eq 'YouTube' })
   $trailer = $yt | Where-Object { $_.type -eq 'Trailer' -and $_.official } | Select-Object -First 1
   if (-not $trailer) { $trailer = $yt | Where-Object { $_.type -eq 'Trailer' } | Select-Object -First 1 }

@@ -473,6 +473,47 @@ class AuthService {
   }
 
   // ============================================================
+  // RESEND CONFIRMATION EMAIL
+  // ============================================================
+
+  Future<void> resendConfirmationEmail(String email) async {
+    final String cleanEmail = email.trim().toLowerCase();
+
+    if (!isValidEmail(cleanEmail)) {
+      throw const MovieGptAuthException(
+        'Please enter a valid email address.',
+      );
+    }
+
+    try {
+      debugPrint('[MovieGPT Auth] Resending confirmation email to: $cleanEmail');
+
+      await _supabase.auth.resend(
+        type: OtpType.signup,
+        email: cleanEmail,
+      );
+
+      debugPrint('[MovieGPT Auth] Confirmation email resent successfully.');
+    } on AuthApiException catch (e) {
+      debugPrint(
+        '[MovieGPT] Supabase Resend Error: '
+        '${e.code} - ${e.message}',
+      );
+
+      throw _mapSupabaseAuthException(e);
+    } catch (e) {
+      debugPrint(
+        '[MovieGPT] Email Resend Error: $e',
+      );
+
+      throw const MovieGptAuthException(
+        'Could not resend confirmation email. '
+        'Please check your connection and try again.',
+      );
+    }
+  }
+
+  // ============================================================
   // FORGOT PASSWORD
   // ============================================================
 

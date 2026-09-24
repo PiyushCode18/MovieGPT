@@ -8,7 +8,7 @@ final authServiceProvider = Provider<AuthService>((ref) {
   return AuthService.instance;
 });
 
-/// The current authentication state, derived from Firebase's auth stream.
+/// The current authentication state, derived from the auth stream.
 ///
 /// Async values:
 /// - `loading`: auth state is still being resolved (splash screen).

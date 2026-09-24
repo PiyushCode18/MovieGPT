@@ -58,7 +58,8 @@ class EnvConfig {
     return raw
         .trim()
         .replaceAll('"', '')
-        .replaceAll("'", '');
+        .replaceAll("'", '')
+        .replaceAll(';', ''); // Netlify variables sometimes have trailing chars
   }
 
   /// Resolves a value from --dart-define first, then .env.
@@ -66,16 +67,16 @@ class EnvConfig {
     String dartDefine,
     String name,
   ) {
+    // 1. Try --dart-define (compile-time)
     final define = _clean(dartDefine);
-
-    if (define.isNotEmpty) {
+    if (define.isNotEmpty && define != 'null') {
       return define;
     }
 
+    // 2. Try flutter_dotenv (.env asset at runtime)
     String fromEnv = '';
-
     try {
-      fromEnv = dotenv.maybeGet(name) ?? '';
+      fromEnv = dotenv.get(name, fallback: '');
     } catch (_) {
       fromEnv = '';
     }
@@ -157,7 +158,7 @@ class EnvConfig {
 
   /// Gemini model.
   ///
-  /// Default: gemini-2.0-flash
+  /// Default: gemini-3.6-flash
   static String get geminiModel {
     final model = _resolve(
       _geminiModel,
@@ -165,7 +166,7 @@ class EnvConfig {
     );
 
     return model.isEmpty
-        ? 'gemini-2.0-flash'
+        ? 'gemini-3.6-flash'
         : model;
   }
 

@@ -25,6 +25,7 @@ class MovieCardSkeletonGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       padding: padding,
+      shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
@@ -34,6 +35,59 @@ class MovieCardSkeletonGrid extends StatelessWidget {
       ),
       itemCount: itemCount,
       itemBuilder: (_, _) => const _PosterSkeleton(),
+    );
+  }
+}
+
+/// A sliver variant of the poster skeleton grid.
+class SliverMovieCardSkeletonGrid extends StatelessWidget {
+  final int itemCount;
+  final int crossAxisCount;
+  final double childAspectRatio;
+
+  const SliverMovieCardSkeletonGrid({
+    super.key,
+    this.itemCount = 6,
+    this.crossAxisCount = 3,
+    this.childAspectRatio = 0.42,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: crossAxisCount,
+        childAspectRatio: childAspectRatio,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (_, _) => const _PosterSkeleton(),
+        childCount: itemCount,
+      ),
+    );
+  }
+}
+
+/// A sliver variant of the genre skeleton grid.
+class SliverGenreSkeletonGrid extends StatelessWidget {
+  final int itemCount;
+
+  const SliverGenreSkeletonGrid({super.key, this.itemCount = 8});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverGrid(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 2.2,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (_, _) => ShimmerBox(radius: 16, height: 60),
+        childCount: itemCount,
+      ),
     );
   }
 }

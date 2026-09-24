@@ -504,7 +504,13 @@ class _MessageBubble extends StatelessWidget {
             ),
             if (message.recommended != null) ...[
               const SizedBox(height: 12),
-              ...message.recommended!.map((m) => _MiniMovieCard(movie: m)),
+              ...message.recommended!.map((m) {
+                try {
+                  return _MiniMovieCard(movie: m);
+                } catch (e) {
+                  return const SizedBox.shrink();
+                }
+              }),
             ],
             if (canRetry) ...[
               const SizedBox(height: 6),

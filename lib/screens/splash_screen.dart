@@ -201,9 +201,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     }
   }
 
-  /// Manually triggers audio playback. Used to satisfy Web autoplay requirements.
+  /// Manually triggers audio playback. Used to satisfy Web autoplay requirements or as a manual trigger.
   void _handleInteraction() {
-    if (!_audioStarted && kIsWeb) {
+    if (!_audioStarted) {
       unawaited(_initAudio());
     }
   }

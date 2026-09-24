@@ -609,6 +609,8 @@ class _EmailAuthSheetState extends ConsumerState<EmailAuthSheet> {
   bool _isCreateMode = false;
   bool _obscurePassword = true;
   bool _submitting = false;
+  bool _resending = false;
+  bool _verificationRequired = false;
 
   @override
   void dispose() {
@@ -625,9 +627,24 @@ class _EmailAuthSheetState extends ConsumerState<EmailAuthSheet> {
       ..showSnackBar(
         SnackBar(
           content: Text(message),
-          duration: const Duration(seconds: 3),
+          duration: const Duration(seconds: 4),
           behavior: SnackBarBehavior.floating,
           backgroundColor: AppTheme.primaryRed,
+        ),
+      );
+  }
+
+  void _showSuccess(String message) {
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: const Duration(seconds: 5),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.green.shade800,
         ),
       );
   }
@@ -656,6 +673,26 @@ class _EmailAuthSheetState extends ConsumerState<EmailAuthSheet> {
     return AuthService.validatePassword(password);
   }
 
+  Future<void> _resend() async {
+    if (_resending) return;
+
+    setState(() => _resending = true);
+
+    try {
+      await ref
+          .read(authServiceProvider)
+          .resendConfirmationEmail(_emailController.text);
+
+      _showSuccess('Verification email resent. Please check your inbox.');
+    } on MovieGptAuthException catch (e) {
+      _showError(e.message);
+    } catch (_) {
+      _showError('Failed to resend email. Please try again later.');
+    } finally {
+      if (mounted) setState(() => _resending = false);
+    }
+  }
+
   Future<void> _submit() async {
     if (_submitting) return;
 
@@ -663,7 +700,10 @@ class _EmailAuthSheetState extends ConsumerState<EmailAuthSheet> {
 
     if (!valid) return;
 
-    setState(() => _submitting = true);
+    setState(() {
+      _submitting = true;
+      _verificationRequired = false;
+    });
 
     try {
       final auth = ref.read(authServiceProvider);
@@ -679,9 +719,12 @@ class _EmailAuthSheetState extends ConsumerState<EmailAuthSheet> {
 
         if (!sessionStarted) {
           if (!mounted) return;
-          setState(() => _submitting = false);
-          _showError(
-            'Account created! Please check your email to confirm your account.',
+          setState(() {
+            _submitting = false;
+            _verificationRequired = true;
+          });
+          _showSuccess(
+            'Account created! Please check your email to verify your account.',
           );
           return;
         }
@@ -704,7 +747,14 @@ class _EmailAuthSheetState extends ConsumerState<EmailAuthSheet> {
     } on MovieGptAuthException catch (e) {
       if (!mounted) return;
 
-      setState(() => _submitting = false);
+      final isUnconfirmed = e.message.toLowerCase().contains('verify your email');
+
+      setState(() {
+        _submitting = false;
+        if (isUnconfirmed) {
+          _verificationRequired = true;
+        }
+      });
 
       _showError(e.message);
     } catch (e) {
@@ -822,8 +872,13 @@ class _EmailAuthSheetState extends ConsumerState<EmailAuthSheet> {
                   // Sign in / create toggle.
                   AuthModeToggle(
                     isCreateMode: _isCreateMode,
-                    onChanged: (create) =>
-                        setState(() => _isCreateMode = create),
+                    onChanged: (create) {
+                      if (_submitting) return;
+                      setState(() {
+                        _isCreateMode = create;
+                        _verificationRequired = false;
+                      });
+                    },
                   ),
 
                   const SizedBox(height: 22),
@@ -834,7 +889,7 @@ class _EmailAuthSheetState extends ConsumerState<EmailAuthSheet> {
                     keyboardType: TextInputType.emailAddress,
                     autofillHints: const [AutofillHints.email],
                     textInputAction: TextInputAction.next,
-                    enabled: !_submitting,
+                    enabled: !_submitting && !_resending,
                     validator: _validateEmail,
                     style: const TextStyle(color: AppTheme.textPrimary),
                     decoration: _fieldDecoration(
@@ -851,7 +906,7 @@ class _EmailAuthSheetState extends ConsumerState<EmailAuthSheet> {
                     obscureText: _obscurePassword,
                     autofillHints: const [AutofillHints.password],
                     textInputAction: TextInputAction.done,
-                    enabled: !_submitting,
+                    enabled: !_submitting && !_resending,
                     validator: _validatePassword,
                     onFieldSubmitted: (_) => _submit(),
                     style: const TextStyle(color: AppTheme.textPrimary),
@@ -869,7 +924,7 @@ class _EmailAuthSheetState extends ConsumerState<EmailAuthSheet> {
                           color: AppTheme.textMuted,
                           size: 20,
                         ),
-                        onPressed: _submitting
+                        onPressed: _submitting || _resending
                             ? null
                             : () => setState(
                                   () => _obscurePassword = !_obscurePassword,
@@ -878,11 +933,60 @@ class _EmailAuthSheetState extends ConsumerState<EmailAuthSheet> {
                     ),
                   ),
 
+                  if (_verificationRequired) ...[
+                    const SizedBox(height: 20),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryRed.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppTheme.primaryRed.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          const Text(
+                            'Email verification is required.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: AppTheme.textPrimary,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          TextButton.icon(
+                            onPressed: _resending ? null : _resend,
+                            icon: _resending
+                                ? const SizedBox(
+                                    width: 14,
+                                    height: 14,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppTheme.primaryRed,
+                                    ),
+                                  )
+                                : const Icon(Icons.mark_email_read_rounded,
+                                    size: 16),
+                            label: Text(
+                              _resending ? 'Resending...' : 'Resend verification email',
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                            style: TextButton.styleFrom(
+                              foregroundColor: AppTheme.primaryRed,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+
                   const SizedBox(height: 24),
 
                   // Submit button.
                   GestureDetector(
-                    onTap: _submitting ? null : _submit,
+                    onTap: _submitting || _resending ? null : _submit,
                     child: Container(
                       height: 54,
                       decoration: BoxDecoration(

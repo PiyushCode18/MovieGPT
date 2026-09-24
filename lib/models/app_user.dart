@@ -1,7 +1,7 @@
 /// A lightweight, UI-safe representation of the authenticated user.
 ///
-/// This model is independent of Firebase and Supabase so the UI
-/// does not depend directly on an authentication provider.
+/// This model is independent of the authentication provider so the UI
+/// layer remains decoupled from specific SDKs.
 class AppUser {
   final String uid;
   final String? email;
