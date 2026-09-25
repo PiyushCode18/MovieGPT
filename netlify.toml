@@ -1,3 +1,4 @@
 [build]
   command = "bash netlify-build.sh"
   publish = "build/web"
+  ignore = "false"

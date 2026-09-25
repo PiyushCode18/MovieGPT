@@ -21,7 +21,7 @@ echo "======================================"
 flutter config --enable-web
 
 echo "======================================"
-echo "Applying environment variables and defaults"
+echo "Applying environment defaults"
 echo "======================================"
 
 export GEMINI_MODEL="${GEMINI_MODEL:-gemini-3.6-flash}"
@@ -35,21 +35,6 @@ export OPENAI_MODEL="${OPENAI_MODEL:-}"
 export SUPABASE_URL="${SUPABASE_URL:-}"
 export SUPABASE_ANON_KEY="${SUPABASE_ANON_KEY:-}"
 
-cat << EOF > .env
-TMDB_API_KEY=${TMDB_API_KEY}
-GEMINI_API_KEY=${GEMINI_API_KEY}
-GEMINI_MODEL=${GEMINI_MODEL}
-AI_PROVIDER=${AI_PROVIDER}
-AI_BACKEND_URL=${AI_BACKEND_URL}
-OPENAI_API_KEY=${OPENAI_API_KEY}
-OPENAI_BASE_URL=${OPENAI_BASE_URL}
-OPENAI_MODEL=${OPENAI_MODEL}
-SUPABASE_URL=${SUPABASE_URL}
-SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
-EOF
-
-echo "Environment file (.env) generated."
-
 echo "======================================"
 echo "Getting dependencies"
 echo "======================================"
@@ -57,29 +42,7 @@ echo "======================================"
 flutter pub get
 
 echo "======================================"
-echo "Checking production configuration"
-echo "======================================"
-
-if [ -z "$TMDB_API_KEY" ]; then
-  echo "WARNING: TMDB_API_KEY environment variable is not set on Netlify."
-else
-  echo "TMDB_API_KEY is present."
-fi
-
-if [ -z "$GEMINI_API_KEY" ]; then
-  echo "WARNING: GEMINI_API_KEY environment variable is not set on Netlify."
-else
-  echo "GEMINI_API_KEY is present."
-fi
-
-if [ -z "$SUPABASE_URL" ]; then
-  echo "WARNING: SUPABASE_URL environment variable is not set on Netlify."
-else
-  echo "SUPABASE_URL is present."
-fi
-
-echo "======================================"
-echo "Building MovieGPT Web Release"
+echo "Building MovieGPT Web Release with --dart-define"
 echo "======================================"
 
 flutter build web --release \
@@ -95,13 +58,11 @@ flutter build web --release \
   --dart-define="SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}"
 
 echo "======================================"
-echo "Ensuring web asset environment file exists"
+echo "Security check: Removing any raw .env from publish assets"
 echo "======================================"
 
-mkdir -p build/web/assets
-mkdir -p build/web/assets/assets
-cp .env build/web/assets/.env
-cp .env build/web/assets/assets/.env
+rm -f build/web/assets/.env
+rm -f build/web/assets/assets/.env
 
 echo "======================================"
 echo "BUILD SUCCESSFUL"
