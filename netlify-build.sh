@@ -35,6 +35,19 @@ export OPENAI_MODEL="${OPENAI_MODEL:-}"
 export SUPABASE_URL="${SUPABASE_URL:-https://xctogbvzpjcnlhwwjfum.supabase.co}"
 export SUPABASE_ANON_KEY="${SUPABASE_ANON_KEY:-sb_publishable_9GwL9mWx9hpVWpd4EwNrZg_13hIGVwo}"
 
+cat << EOF > .env
+TMDB_API_KEY=${TMDB_API_KEY}
+GEMINI_API_KEY=${GEMINI_API_KEY}
+GEMINI_MODEL=${GEMINI_MODEL}
+AI_PROVIDER=${AI_PROVIDER}
+AI_BACKEND_URL=${AI_BACKEND_URL}
+OPENAI_API_KEY=${OPENAI_API_KEY}
+OPENAI_BASE_URL=${OPENAI_BASE_URL}
+OPENAI_MODEL=${OPENAI_MODEL}
+SUPABASE_URL=${SUPABASE_URL}
+SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+EOF
+
 echo "======================================"
 echo "Getting dependencies"
 echo "======================================"
@@ -61,6 +74,7 @@ echo "======================================"
 echo "Security check: Removing any raw .env from publish assets"
 echo "======================================"
 
+rm -f .env
 rm -f build/web/assets/.env
 rm -f build/web/assets/assets/.env
 
