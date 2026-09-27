@@ -5,7 +5,17 @@ echo "======================================"
 echo "Installing Flutter..."
 echo "======================================"
 
-git clone https://github.com/flutter/flutter.git --depth 1 -b stable "$HOME/flutter"
+if [ -d "$HOME/flutter" ]; then
+  echo "Flutter directory already exists in build container. Updating..."
+  cd "$HOME/flutter"
+  git fetch --depth 1 origin stable || true
+  git checkout stable || true
+  cd -
+else
+  echo "Cloning Flutter stable channel..."
+  git clone https://github.com/flutter/flutter.git --depth 1 -b stable "$HOME/flutter"
+fi
+
 export PATH="$HOME/flutter/bin:$PATH"
 
 echo "======================================"
